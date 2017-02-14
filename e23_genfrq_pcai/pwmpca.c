@@ -1,0 +1,190 @@
+#include "pwmpca.h"
+
+#include "C8051F120.h"                  // SFR declarations
+#include "C8051F120_io.h"               // SFR declarations
+
+
+//------------------------------------------------------------------------------------
+// Hardware IO CONSTANTS
+//------------------------------------------------------------------------------------
+__sbit __at (0xB0) PWMout0;             // output bit 0
+__sbit __at (0xB1) PWMout1;             // output bit 1
+__sbit __at (0xB2) PWMout2;             // output bit 2
+__sbit __at (0xB3) PWMout3;             // output bit 3
+__sbit __at (0xB4) PWMout4;             // output bit 4
+__sbit __at (0xB5) PWMout5;             // output bit 5
+
+//------------------------------------------------------------------------------------
+// Global CONSTANTS
+//------------------------------------------------------------------------------------
+__code const uint8_t PCA0CN_offonBits[2][6] = { {~0x01, ~0x02, ~0x04, ~0x08, ~0x10, ~0x20},
+                                                      { 0x01,  0x02,  0x04,  0x08,  0x10,  0x20} };
+
+//-----------------------------------------------------------------------------
+// Global Variables
+//-----------------------------------------------------------------------------
+uint32_t systemclock;
+uint8_t PCA0CN_mask = 0xBF;       // mask for bits: 10111111, see doc for PCA0CN
+// __xdata will be used for arrays because of shortage of __data RAM
+__xdata uint16_t  PCAincrComp[6] = {0, 0, 0, 0, 0, 0};
+__xdata uint16_t  PCAnextComp[6] = {0, 0, 0, 0, 0, 0};
+
+//-----------------------------------------------------------------------------
+// PCA0_Init
+//-----------------------------------------------------------------------------
+//
+// Configure the Programmable Counters
+//
+void PCA0_PWM_Init(uint32_t sysclk)
+{
+    uint8_t SFRPAGE_SAVE = SFRPAGE;        // Save Current SFR page
+    uint8_t modeN = 0x49;         // 0x4- sets counter to 16-bit comparator mode
+                                        //      AM: do not set to C to enforce 16bit mode separately
+                                        // 0x-8 to enable comparator match to be detected and set
+                                        // 0x-1 to enable comparator interrupt after match is detected
+                                        // 0x-2 to (toggle) output for PWM - it can be routed to port pins or/and read from reg
+
+    systemclock = sysclk;
+
+    SFRPAGE = CONFIG_PAGE;              // set SFR page
+    P3MDOUT |= 0x3F;                    // Set P3.0 through P3.5 to push-pull
+
+    SFRPAGE   = PCA0_PAGE;              // set SFR page
+    PCA0CN    = 0x00;                   // reset counter interrupt bits and disable the counter -0------
+    PCA0MD    = 0x00;                   // ----SRC- controls the SouRCe of the counting
+                                        //     000  - SYSCLK/12
+                                        //     001  - SYSCLK/4
+                                        //     010  - Timer0 overflow (but Timer0 will be used later for something)
+                                        //     100  - SYSCK, also can use external inputs and external oscillator/8
+                                        // -------1 - enables counter roll-over interrupt
+
+    // Program all of the comparators the same way
+    PCA0CPM0  = modeN;
+    PCA0CPM1  = modeN;
+    PCA0CPM2  = modeN;
+    PCA0CPM3  = modeN;
+    PCA0CPM4  = modeN;
+    PCA0CPM5  = modeN;
+
+    // Important: set the low byte first (stops comparing), and the high byte next (starts comparing again)
+    // 16-bit sfr operations satisfy this requirement
+    PCA0CP0   = PCAnextComp[0];
+    PCA0CP1   = PCAnextComp[1];
+    PCA0CP2   = PCAnextComp[2];
+    PCA0CP3   = PCAnextComp[3];
+    PCA0CP4   = PCAnextComp[4];
+    PCA0CP5   = PCAnextComp[5];
+
+    PCA0      = 0x0000;                 // Reset PCA Counter Value to 0x0000
+
+    PCA0CN   |= 0x40;                   // enable the counter - -1------
+
+    SFRPAGE   = CONFIG_PAGE;
+    EIE1     |= 0x08;                   // Enable PCA0 interrupt at EIE1.3
+
+    SFRPAGE = SFRPAGE_SAVE;             // Restore SFR page
+}
+
+//-----------------------------------------------------------------------------
+// PCA0_ISR -- PWM Wave Generator
+//-----------------------------------------------------------------------------
+//
+// This ISR is called on event in any of PCA0 comparators or PCA0 counter overflow.
+// If we could output PCA0CN directly to P0.3-P0.6 then manual copying to P3
+// would have been unnecessary. However, crossbar is set tu map /INT0 to P0.3
+// that is used by Ethernet board and TCP/IP stack library later on
+//
+void PCA0_PWM_ISR (void) __interrupt 9 __using 3
+{
+    uint8_t intsrc;
+    SFRPAGE = PCA0_PAGE;                // set SFR page
+    intsrc  = PCA0CN;                   // check the interrupt source as quickly as possible
+    PCA0CN  = 0x40;                     // we always must clear PCA0 interrupt flags manually - do it immediately
+                                        // to avoid resetting overflows that happened next and were not recorded in the step above
+    intsrc  = intsrc & PCA0CN_mask;     // mask the saved interrupt source with action enable register
+
+    //P3  = (P3 & 0xC0) | ( PCA0CN & PCA0CN_mask /* & 0x3F */); // preserve two highest bits, and copy the six lowest bits
+    if (intsrc & 0x01)
+    {
+        P3 ^= 0x01;
+        PCAnextComp[0] += PCAincrComp[0];
+        PCA0CP0 = PCAnextComp[0];
+    }
+    if (intsrc & 0x02)
+    { 
+        P3 ^= 0x02;
+        PCAnextComp[1] += PCAincrComp[1];
+        PCA0CP1 = PCAnextComp[1];
+    }
+    if (intsrc & 0x04)
+    {
+        P3 ^= 0x04;
+        PCAnextComp[2] += PCAincrComp[2];
+        PCA0CP2 = PCAnextComp[2];
+    }
+    if (intsrc & 0x08)
+    {
+        P3 ^= 0x08;
+        PCAnextComp[3] += PCAincrComp[3];
+        PCA0CP3 = PCAnextComp[3];
+    }
+    if (intsrc & 0x10)
+    {
+        P3 ^= 0x10;
+        PCAnextComp[4] += PCAincrComp[4];
+        PCA0CP4 = PCAnextComp[4];
+    }
+    if (intsrc & 0x20)
+    {
+        P3 ^= 0x20;
+        PCAnextComp[5] += PCAincrComp[5];
+        PCA0CP5 = PCAnextComp[5];
+    }
+/*
+    if (intsrc & 0x80)
+    {
+        // nothing to do on roll over
+    }
+*/
+
+    // This is an interrupt, the original SFR page will be restored upon return from it
+}
+
+void PCA0_PWM_SetOn(uint8_t channel, PWMstate newstate)
+{
+    __bit EA_SAVE     = EA;             // Preserve Current Interrupt Status
+    EA = 0;                             // disable interrupts
+    if (newstate==ON)
+    {
+        PCA0CN_mask |= PCA0CN_offonBits[1][channel];
+    } else {
+        PCA0CN_mask &= PCA0CN_offonBits[0][channel];
+    }
+    PCA0CN_mask |= 0x80;                // just in case channel>6 to recover overflow detection
+    EA = EA_SAVE;                       // restore interrupts
+}
+
+void PCA0_PWM_SetOffset   (uint8_t channel, uint16_t deltaoffset)
+{
+    uint8_t SFRPAGE_SAVE = SFRPAGE;        // Save Current SFR page
+    __bit EA_SAVE     = EA;             // Preserve Current Interrupt Status
+    EA = 0;                             // disable interrupts
+
+    PCAnextComp[channel] = PCAnextComp[channel] + (int32_t)deltaoffset * PCAincrComp[channel] / 180;
+
+    EA = EA_SAVE;                       // restore interrupts
+    SFRPAGE = SFRPAGE_SAVE;             // Restore SFR page
+}
+
+void PCA0_PWM_SetFrequency(uint8_t channel, uint32_t newfrequency)
+{
+    uint8_t SFRPAGE_SAVE = SFRPAGE;        // Save Current SFR page
+    __bit EA_SAVE     = EA;             // Preserve Current Interrupt Status
+    EA = 0;                             // disable interrupts
+
+    PCAincrComp[channel] = ((systemclock>>2)/newfrequency)>>1;
+                        //   ^^^^^^^^^^^^^^ PCA source frequency
+
+    EA = EA_SAVE;                       // restore interrupts
+    SFRPAGE = SFRPAGE_SAVE;             // Restore SFR page
+}

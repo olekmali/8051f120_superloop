@@ -1,0 +1,61 @@
+// Copyright (C) 2009-2017 Aleksander Malinowski
+
+#include "C8051F120.h"                  // Device-specific SFR Definitions
+#include "C8051F120_io.h"
+
+#include "bu_init.h"
+#include "bu_uart.h"
+#include "bu_com.h"
+#include "interrupt.h"
+
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#define BAUDRATE     9600               // Baud rate of UART in bps
+#define SAMPLE_RATE 50000L              // Interrupt frequency in Hz - high to accommodate high range of PWM frequencies
+
+void main(void)
+{
+    uint32_t errors = 0, correct = 0;
+    int32_t a=1, b=1, c, d;
+    __xdata static char buffer[64];
+
+    // Disable watchdog timer
+    WDTCN = 0xde;
+    WDTCN = 0xad;
+
+    PORT_Init ();
+    SYSCLK_Init();
+    UART_Init(SYSCLK, 9600);
+
+    // using Timer4 as update scheduler initialize T4 to update DAC1 after (SYSCLK cycles)/sample have passed.
+    Timer4_Init (SYSCLK, SAMPLE_RATE);
+    EA = 1;
+
+    a = 654321;
+    b = 123456;
+    while (1) {
+        // below you can find the same division encoded in two different ways
+        // hopefully the compiler optimization is unable to see and optimize that
+
+        EA = 0; // <- comment this and you will see errors detected
+        c = a / b;
+        a = a * 10;
+        b = b * 10;        
+        d = a / b;
+        a = a / 10;
+        b = b / 10;
+        EA = 1;
+
+        if (c != d) errors++; else correct++;
+
+        EA = 0; // <- comment this and you may see program hangs on sprintf!!
+        sprintf(buffer,"err: %lu ok: %lu   \r", errors, correct);
+//      sprintf(buffer,"a: %ld b: %ld c: %ld d: %ld   \r", a, b, c, d);
+        EA = 1;
+
+        UART_puts(buffer);
+    }
+
+}

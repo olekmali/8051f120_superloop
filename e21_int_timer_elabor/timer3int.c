@@ -127,7 +127,7 @@ void Timer3_ISR (void) __interrupt 14
         // *** service the event ***
         // check if the phase number is even or odd
         // except no LED if we count for 0 seconds ("off mode")
-        if (phase &0x01 || 0==counter)
+        if (phase & 0x01 || 0==counter)
             LED = 0;
         else
             LED = 1;

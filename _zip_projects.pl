@@ -13,7 +13,7 @@ closedir(DIR);
 my $item;
 foreach $item (@filelist)
 {
-    next if (($item eq ".") or ($item eq ".."));
+    next if (($item eq ".") or ($item eq "..") or ($item eq ".git") or ($item =~ /_done$/i));
     next unless (-d $item);
     next if ($item =~ /_todo_/i);
     

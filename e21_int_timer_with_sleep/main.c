@@ -1,9 +1,11 @@
 // Copyright (C) 2015-2017 Aleksander Malinowski
 
-#include "bu_init.h"
-#include "timer3int.h"
 #include "c8051F120.h"                  // Device-specific SFR Definitions
 #include "c8051F120_io.h"               // Device-specific SFR Definitions
+
+#include "bu_init.h"
+#include "bu_watchdog.h"
+#include "timer3int.h"
 
 #include <stdint.h>
 
@@ -16,10 +18,8 @@ void main(void)
 {
     uint16_t cnt;
 
-    // Set up watchdog timer
-    WDTCN = 0xa5;   // reset count
-    WDTCN = 0xff;   // disable disabling
-    WDTCN = 0x07;   // set time out value to maximum (10.4ms @ 100MHz)
+    // Set up watchdog timer (10.4ms at sysclk of 100MHz)
+    WatchDog_set_10ms();
 
     PORT_Init ();
     SYSCLK_Init();
@@ -36,19 +36,18 @@ void main(void)
     {
         // wait for Timer3 interrupt, when it ends
         while( !Timer3_GetSemaphore() ) {
-            // WDTCN = 0xa5;    // optionally reset watchdog timer while waiting
-            // for the right interrupt to be completed
+            // WatchDog_reset();    // optionally reset watchdog timer while waiting
+                                    // for the right interrupt to be completed
             
             // sleep until an interrupt happens and then check [again]
             // if it is the one we are waiting for to be completed
-            PCON |= 0x01; // Set IDLE bit
-            PCON = PCON; // ... Followed by a 3-cycle Dummy Instruction
+            CPU_sleep();
         }
         // and immediately afterwards reset the interrupt done marker for the next time
         Timer3_ResetSemaphore();
 
         // Reset watchdog timer
-        WDTCN = 0xa5;
+        WatchDog_reset();
 
         // demo: keep alive indicator
         // experiment: decrease LOOP_RATE to see that

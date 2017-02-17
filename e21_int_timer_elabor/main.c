@@ -31,43 +31,55 @@ void main(void)
 
     while (1)
     {
-        // wait for Timer3 interrupt, when it ends
+        // wait for Timer3 interrupt, at the rate of LOOP_RATE
+        // it will release the semaphore so that the loop does one iteration
         while( !Timer3_GetSemaphore() ) {
-            // WatchDog_reset();    // optionally reset watchdog timer while waiting
-                                    // for the right interrupt to be completed
+            WatchDog_reset();   // not every interupt releases the semaphore
+                                // reset the watchdog timer while still waiting
             
-            // sleep until an interrupt happens and then check [again]
+            // sleep until the next interrupt happens and then check [again]
             // if it is the one we are waiting for to be completed
             CPU_sleep();
         }
         // and immediately afterwards reset the interrupt done marker for the next time
         Timer3_ResetSemaphore();
 
-        // Reset watchdog timer
+        // Reset the watchdog timer
         WatchDog_reset();
+
+        
+        // code below is executed at the frequency of LOOP_RATE 
+        // all timing is expressed by loop counts times (1000ms/LOOP_RATE)
+        // in this example the loop rate is 100 and hence the time period is 10ms
+        // **********************************************************************
 
         // handle timing of switches
         if (!SW2)
         {
-            if (time_SW2_released>10)             // check if pressed after released for at least 100ms
+            if (time_SW2_released>10)               // check if pressed after released for at least 100ms
             {
                 time_SW2_released = 0;
             }
 
-            if (time_SW2_pressed<0xffff) time_SW2_pressed++;  // increment only if still within range
+            if (time_SW2_pressed<0xffff)
+            {
+                time_SW2_pressed++;                 // increment only if still within the range to prevent roll over
+            }
         }
         else
         {
-            if (time_SW2_pressed>10)                // check if released after pressed for at least 100ms
+            if (time_SW2_pressed>10)                // check if was pressed for at least 10 loops - 100ms (debouncing)
             {
-                if (time_SW2_pressed>60)            // int32_t press, int32_ter than 600ms
+                if (time_SW2_pressed>60)            // check if was pressed for more than 60 loops - 600ms
                 {
+                    // code specific to the particular application
                     if (mode==(MAX_MODES-1)) mode=0;
-                    else mode=(MAX_MODES-1);        // we arranged for the very last mode to be off mode
+                    else mode=(MAX_MODES-1);        // we arranged for the very last mode to be the off mode
                     Timer3_setMode(mode);
                 }
-                else                                // short press (but int32_ter than 100ms)
+                else                                // was pressed for not more than 60 loops (but more than debouncing)
                 {
+                    // code specific to the particular application
                     // advance to the next mode but skip the "off mode"
                     mode++; if (mode>=(MAX_MODES-1)) mode=0;
                     Timer3_setMode(mode);
@@ -75,7 +87,9 @@ void main(void)
                 time_SW2_pressed = 0;               // reset the pressed value so that we handle pressed only once
             }
 
-            if (time_SW2_released<0xffff) time_SW2_released++;  // increment only if still within range
+            if (time_SW2_released<0xffff) {
+                time_SW2_released++;                // increment only if still within the range to prevent roll over
+            }
         }
 
     }

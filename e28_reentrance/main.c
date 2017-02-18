@@ -7,6 +7,7 @@
 #include "bu_uart.h"
 #include "bu_com.h"
 #include "interrupt.h"
+#include "bu_wait.h"
 
 #include <stdint.h>
 #include <stdio.h>
@@ -49,13 +50,16 @@ void main(void)
         EA = 1;
 
         if (c != d) errors++; else correct++;
+        // note: this above is just for quick testig as the variables will eventually overflow and roll over
 
         EA = 0; // <- comment this and you may see program hangs on sprintf!!
-        sprintf(buffer,"err: %lu ok: %lu   \r", errors, correct);
+        sprintf(buffer,"err: %lu ok: %lu              \r", errors, correct);
 //      sprintf(buffer,"a: %ld b: %ld c: %ld d: %ld   \r", a, b, c, d);
         EA = 1;
 
         UART_puts(buffer);
+        wait_ms(SYSCLK, 50);    // this is line is to prevent buggy Windows UART-USB device drivers
+                                // from crashing when continuous stream of data is received from uC
     }
 
 }

@@ -11,7 +11,7 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#define BAUDRATE     9600               // Baud rate of UART in bps
+#define BAUDRATE     9600U              // Baud rate of UART in bps
 #define SAMPLE_RATE  8000L              // Sample frequency in Hz
 
 void main(void)
@@ -22,7 +22,7 @@ void main(void)
 
     PORT_Init ();
     SYSCLK_Init();
-    UART_Init(SYSCLK, 9600);
+    UART_Init(SYSCLK, BAUDRATE);
 
     ADC0_DACs_Timer3_Init(SYSCLK, SAMPLE_RATE);
     // Needs global interrupts enabled to work

@@ -12,8 +12,8 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#define BAUDRATE      (9600)            // Baud rate of UART in bps
-#define SAMPLE_RATE    (100L)           // Sample frequency in Hz
+#define BAUDRATE     9600U              // Baud rate of UART in bps
+#define SAMPLE_RATE   100L              // Sample frequency in Hz
 
 void main(void)
 {
@@ -61,7 +61,7 @@ void main(void)
         {
             // Read the latest A/D results
             uint16_t value = getRecentResult(ch);
-            int16_t converted = (int32_t)value * VREF / ADC0_MAX;
+            uint16_t converted = (int32_t)value * (uint16_t)VREF / ADC0_MAX;
 
             sprintf(buffer, " ch%1d:%4d", ch, converted );  // note: !! formatting works only on xdata buffer !!
 
@@ -73,8 +73,8 @@ void main(void)
         }
 
         {
-            uint16_t temperature;   // temperature in hundredths of a degree C
-            int16_t temp_int, temp_frac;    // integer and fractional portions of temperature
+            uint16_t temperature;           // temperature in hundredths of a degree C
+            uint16_t temp_int, temp_frac;   // integer and fractional portions of temperature
 
             temperature = getRecentResult(8) <<1; // compensate for gain==1 instead of ==2
 

@@ -13,7 +13,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define BAUDRATE     9600               // Baud rate of UART in bps
+#define BAUDRATE     9600U              // Baud rate of UART in bps
 #define BUFLEN        160
 
 
@@ -26,9 +26,9 @@ void main(void)
     __xdata char buffer[BUFLEN+1];
 
     uint16_t    ADCReading[ADC0_CH_MAX];
-    uint8_t   gain[ADC0_CH_MAX]={1,1,1,1,1,1,1,1};
+    uint8_t     gain[ADC0_CH_MAX]={1,1,1,1,1,1,1,1};
     uint16_t    voltage[ADC0_CH_MAX];
-    uint8_t   inputchannel=0;
+    uint8_t     inputchannel=0;
 
     // Disable watchdog timer
     WDTCN = 0xde;
@@ -36,7 +36,7 @@ void main(void)
 
     PORT_Init ();
     SYSCLK_Init();
-    UART_Init(SYSCLK, 9600);
+    UART_Init(SYSCLK, BAUDRATE);
 
     ADC0_Wait_Init(SYSCLK);
     setChannel(0);
@@ -90,11 +90,11 @@ void main(void)
         EA=0;
         if(gain[inputchannel]!=ADC0_GAIN_HALF)
         {
-            voltage[inputchannel] = (int32_t)ADCReading[inputchannel]*VREF/gain[inputchannel]/ADC0_MAX;
+            voltage[inputchannel] = (int32_t)ADCReading[inputchannel]*(uint16_t)VREF/gain[inputchannel]/ADC0_MAX;
         }
         else // gain of 0.5
         {
-            voltage[inputchannel] = (int32_t)ADCReading[inputchannel]*(2*VREF)/ADC0_MAX;
+            voltage[inputchannel] = (int32_t)ADCReading[inputchannel]*((uint8_t)2*(uint16_t)VREF)/ADC0_MAX;
         }
         EA=1;
 

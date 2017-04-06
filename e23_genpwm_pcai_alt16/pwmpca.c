@@ -34,8 +34,8 @@ __data uint16_t  PCAnextComp[6] = { 0x2000, 0x4000, 0x6000, 0x8000, 0xA000, 0xC0
 //
 void PCA0_Init()
 {
-    uint8_t SFRPAGE_SAVE = SFRPAGE;        // Save Current SFR page
-    uint8_t modeN = 0x49;         // 0x4- sets counter to 16-bit comparator mode
+    uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save Current SFR page
+    uint8_t modeN = 0x49;               // 0x4- sets counter to 16-bit comparator mode
                                         //      AM: do not set to C to enforce 16bit mode separately
                                         // 0x-8 to enable comparator match to be detected and set
                                         // 0x-1 to enable comparator interrupt after match is detected

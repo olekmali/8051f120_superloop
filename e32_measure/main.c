@@ -12,14 +12,14 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#define BAUDRATE     9600               // Baud rate of UART in bps
+#define BAUDRATE     9600U              // Baud rate of UART in bps
 #define SAMPLE_RATE 50000L              // Sample frequency in Hz
-#define AVG_CNT         8               // 2^how many == samples should be averaged
+#define AVG_CNT         8U              // 2^how many == samples should be averaged
 
 void main(void)
 {
-    uint16_t temperature;           // temperature in hundredths of a degree C
-    int16_t temp_int, temp_frac;            // integer and fractional portions of temperature
+    uint16_t temperature;               // temperature in hundredths of a degree C
+    uint16_t temp_int, temp_frac;       // integer and fractional portions of temperature
     __xdata char buffer[80];            // character buffer for outputting temperature
 
     // Disable watchdog timer
@@ -28,7 +28,7 @@ void main(void)
 
     PORT_Init ();
     SYSCLK_Init();
-    UART_Init(SYSCLK, 9600);
+    UART_Init(SYSCLK, BAUDRATE);
 
     ADC0_Timer3_Init(SYSCLK, SAMPLE_RATE, AVG_CNT); 
     // Needs global interrupts enabled to work

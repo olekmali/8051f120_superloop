@@ -9,7 +9,7 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#define BAUDRATE     9600               // Baud rate of UART in bps
+#define BAUDRATE     9600U              // Baud rate of UART in bps
 
 void main(void)
 {
@@ -22,7 +22,7 @@ void main(void)
     // Initialize the MCU
     PORT_Init();
     SYSCLK_Init();
-    UART_Init(SYSCLK, 9600);
+    UART_Init(SYSCLK, BAUDRATE);
 
     LED = 1;
 

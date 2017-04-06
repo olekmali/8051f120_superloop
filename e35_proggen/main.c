@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define BAUDRATE     (9600)             // Baud rate of UART in bps
+#define BAUDRATE     9600U              // Baud rate of UART in bps
 #define SAMPLE_RATE (100000L)           // Sample frequency in Hz
 #define BUFLEN         20
 

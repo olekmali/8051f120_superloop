@@ -3,7 +3,7 @@
 #include <stdint.h>
 
 #define         ADC0_MAX    (0xFFF0)
-#define         VREF          (2400)
+#define         VREF         (2400U)
 
 #define         ADC0_CH_TEMP     (8)
 #define         ADC0_CH_MAX      (8)

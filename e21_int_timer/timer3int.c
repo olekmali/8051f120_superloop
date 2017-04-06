@@ -20,15 +20,15 @@ static /* volatile */ uint16_t  Timer3_rate2 = 0;
 void Timer3_Init (uint32_t sysclock, uint32_t rate)
 {
     uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save Current SFR page
-    int32_t counts = sysclock/12/rate;  // Init Timer3 to generate interrupts at a RATE Hz rate.
+    uint16_t counts = (uint16_t)( sysclock/(12L*rate) ); // Init Timer3 to generate interrupts at a RATE Hz rate.
                                         // Note that timer3 is connected to SYSCLK/12
 
     SFRPAGE = TMR3_PAGE;                // set SFR page
     TMR3CN  = 0x00;                     // Stop Timer3; Clear TF3;
     TMR3CF  = 0x00;                     // use SYSCLK/12 as timebase
 //  TMR3CF  = 0x08;                     // use SYSCLK as timebase
-    RCAP3   = 65536 -(uint16_t)counts;  // Init reload values
-    // or   = -(uint16_t)counts; -- see the in class comment
+    RCAP3   = (uint16_t)( 65536U - counts ); // Init reload values
+    // or   = -counts; -- see the in class comment
     TMR3    = 0xffff;                   // set to reload immediately
     EIE2   |= 0x01;                     // enable Timer3 interrupts - bit 00000001 or ET3 = 1;
 

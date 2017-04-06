@@ -70,7 +70,7 @@ __code const int16_t SINE_TABLE[128] = { // half - 128, full - 256
 void DAC0_Timer3_Init (uint32_t sysclock, uint32_t rate)
 {
     uint8_t SFRPAGE_SAVE = SFRPAGE;        // Save Current SFR page
-    uint32_t counts = sysclock/12/rate; // Note that timer3 is connected to SYSCLK/12
+    uint16_t counts = (uint16_t)( sysclock/(12L*rate) ); // Note that timer3 is connected to SYSCLK/12
 
     sampling = rate;
     phase_add  = (uint16_t)((628L * frequency * 65536) / sampling / 100);
@@ -90,8 +90,8 @@ void DAC0_Timer3_Init (uint32_t sysclock, uint32_t rate)
     TMR3CN  = 0x00;                     // Stop Timer3; Clear TF3;
     TMR3CF  = 0x00;                     // use SYSCLK/12 as timebase
 //  TMR3CF  = 0x08;                     // use SYSCLK as timebase
-    RCAP3   = 65536 -(uint16_t)counts;  // Init reload values
-    // or   = -(uint16_t)counts; -- see the in class comment
+    RCAP3   = (uint16_t)( 65536U - counts ); // Init reload values
+    // or   = -counts; -- see the in class comment
     TMR3    = 0xffff;                   // set to reload immediately
     EIE2   |= 0x01;                     // enable Timer3 interrupts - bit 00000001 or ET3 = 1;
     TMR3CN |= 0x04;                     // start Timer3

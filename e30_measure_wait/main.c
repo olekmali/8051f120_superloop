@@ -12,13 +12,13 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#define BAUDRATE     9600               // Baud rate of UART in bps
+#define BAUDRATE     9600U              // Baud rate of UART in bps
 #define TEMP_CHANNEL  (8)
 
 void main(void)
 {
-    uint16_t temperature;           // temperature in hundredths of a degree C
-    int16_t temp_int, temp_frac;            // integer and fractional portions of temperature
+    uint16_t temperature;               // temperature in hundredths of a degree C
+    uint16_t temp_int, temp_frac;       // integer and fractional portions of temperature
     __xdata char buffer[80];            // character buffer for outputting temperature
 
     // Disable watchdog timer
@@ -27,12 +27,10 @@ void main(void)
 
     PORT_Init ();
     SYSCLK_Init();
-    UART_Init(SYSCLK, 9600);
+    UART_Init(SYSCLK, BAUDRATE);
 
     ADC0_Wait_Init(SYSCLK);
     setGain(1);
-
-    EA = 1;                             // Enable global interrupts
 
     while (1)
     {
@@ -47,7 +45,7 @@ void main(void)
         temp_int = temperature / 10;
         temp_frac = temperature - (temp_int * 10);
 
-        sprintf (buffer, "The temperature is %+02d.%1d\n", temp_int, temp_frac);
+        sprintf (buffer, "The temperature is %+02d.%1dC\n", temp_int, temp_frac);
         UART_puts(buffer);
     
         if (temp_int<30)

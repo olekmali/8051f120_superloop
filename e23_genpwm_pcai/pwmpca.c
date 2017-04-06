@@ -31,8 +31,8 @@ uint8_t PCA0CN_mask = 0xBF;       // mask for bits: 10111111, see doc for PCA0CN
 //
 void PCA0_Init()
 {
-    uint8_t SFRPAGE_SAVE = SFRPAGE;        // Save Current SFR page
-    uint8_t modeN = 0x49;         // 0x4- sets counter to 16-bit comparator mode
+    uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save Current SFR page
+    uint8_t modeN = 0x49;               // 0x4- sets counter to 16-bit comparator mode
                                         //      AM: do not set to C to enforce 16bit mode separately
                                         // 0x-8 to enable comparator match to be detected and set
                                         // 0x-1 to enable comparator interrupt after match is detected

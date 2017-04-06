@@ -22,16 +22,16 @@ uint16_t result[9];                 // ADC0 decimated value - visible outside by
 //
 void ADC0_Timer3_Init (uint32_t sysclock, uint32_t rate)
 {
-    uint8_t SFRPAGE_SAVE = SFRPAGE;        // Save Current SFR page
-    int16_t counts = sysclock/rate;         // Init Timer3 to generate interrupts at a RATE Hz rate.
+    uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save Current SFR page
+    uint16_t counts = (uint16_t)( sysclock/(12L*rate) ); // Init Timer3 to generate interrupts at a RATE Hz rate.
                                         // Note that timer3 is connected to SYSCLK
 
     SFRPAGE = TMR3_PAGE;                // set SFR page
     TMR3CN  = 0x00;                     // Stop Timer3; Clear TF3;
 //  TMR3CF  = 0x00;                     // use SYSCLK/12 as timebase
     TMR3CF  = 0x08;                     // use SYSCLK as timebase
-    RCAP3   = 65536 -(uint16_t)counts;  // Init reload values
-    // or   = -(uint16_t)counts; -- see the in class comment
+    RCAP3   = (uint16_t)(65536U - counts); // Init reload values
+    // or   = -counts; -- see the in class comment
     TMR3    = RCAP3;                    // set to reload immediately
     EIE2   &= ~0x01;                    // DISABLE Timer3 interrupts
     TMR3CN |= 0x04;                     // start Timer3

@@ -29,11 +29,11 @@ static uint16_t sampling    = (uint16_t)50000L;   // sampling frequency of outpu
 static uint16_t phase_add   = (uint16_t)PHASE_ADD_1KHZ;
 
 static PWMstate         output_offon[NUM_PWM_CHANNELS]          = {OFF, OFF, OFF, OFF, OFF, OFF};    // current state of channel - off/on
-static uint16_t     dutycount[NUM_PWM_CHANNELS]             = {0,   0,   0,   0,   0,   0};
+static uint16_t     dutycount[NUM_PWM_CHANNELS]                 = {0,   0,   0,   0,   0,   0};
                                                                   // ^^^ duty cycle in timer interrupt ticks, defaults to 0%
 static uint8_t    desired_changed = 0;
 static PWMstate         desired_output_offon[NUM_PWM_CHANNELS]  = {OFF, OFF, OFF, OFF, OFF, OFF};
-static uint16_t     desired_dutycount[NUM_PWM_CHANNELS]     = {0,   0,   0,   0,   0,   0};
+static uint16_t     desired_dutycount[NUM_PWM_CHANNELS]         = {0,   0,   0,   0,   0,   0};
 
 //------------------------------------------------------------------------------------
 // Timer4_PWM_Init
@@ -45,7 +45,7 @@ static uint16_t     desired_dutycount[NUM_PWM_CHANNELS]     = {0,   0,   0,   0,
 void Timer4_PWM_Init (uint32_t sysclock, uint32_t rate)
 {
     uint8_t SFRPAGE_SAVE = SFRPAGE;        // Save Current SFR page
-    int32_t counts = sysclock/(12*rate);   // Note that Timer4 is connected to SYSCLK/12
+    uint16_t counts = (uint16_t)( sysclock/(12L*rate) ); // Note that Timer4 is connected to SYSCLK/12
 
     sampling = rate;
     phase_add= ((uint32_t)FREQUENCY) * ((uint32_t)PHASE_PREC) / sampling;
@@ -57,8 +57,8 @@ void Timer4_PWM_Init (uint32_t sysclock, uint32_t rate)
     TMR4CN  = 0x00;                     // Stop Timer4; Clear TF4;
     TMR4CF  = 0x00;                     // use SYSCLK/12 as timebase
 //  TMR4CF  = 0x08;                     // use SYSCLK as timebase
-    RCAP4   = 65536 -(uint16_t)counts;  // Init reload values
-    // or   = -(uint16_t)counts; -- see the in class comment
+    RCAP4   = (uint16_t)( 65536U - counts ); // Init reload values
+    // or   = -counts; -- see the in class comment
     TMR4    = RCAP4;                    // set starting value
     EIE2   |= 0x04;                     // enable Timer4 interrupts - bit 00000100 or ET4 = 1;
     TMR4CN |= 0x04;                     // start Timer4

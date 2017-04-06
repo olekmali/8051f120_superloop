@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define BAUDRATE     9600               // Baud rate of UART in bps
+#define BAUDRATE     9600U              // Baud rate of UART in bps
 #define BUFLEN         20
 
 void main(void)
@@ -27,7 +27,7 @@ void main(void)
 
     PORT_Init ();
     SYSCLK_Init();
-    UART_Init(SYSCLK, 9600);
+    UART_Init(SYSCLK, BAUDRATE);
 
     PCA0_Init();
     EA = 1;

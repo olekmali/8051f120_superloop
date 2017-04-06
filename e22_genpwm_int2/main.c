@@ -12,11 +12,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define BAUDRATE        (9600)          // Baud rate of UART in bps
-#define BUFLEN            (20)          // Maximum user buffer size
-#define SAMPLE_RATE    (50000L)         // Interrupt frequency in Hz - high to accommodate high range of PWM frequencies
-#define PWM_FREQUENCY   (1000)          // Interrupt frequency in Hz - high to accommodate high range of PWM frequencies
-#define PWM_RESOLUTION   (100)
+#define BAUDRATE         9600U          // Baud rate of UART in bps
+#define BUFLEN             20           // Maximum user buffer size
+#define SAMPLE_RATE     50000L          // Interrupt frequency in Hz - high to accommodate high range of PWM frequencies
+#define PWM_FREQUENCY    1000           // Interrupt frequency in Hz - high to accommodate high range of PWM frequencies
+#define PWM_RESOLUTION    100 
 
 void main(void)
 {
@@ -30,7 +30,7 @@ void main(void)
 
     PORT_Init ();
     SYSCLK_Init();
-    UART_Init(SYSCLK, 9600);
+    UART_Init(SYSCLK, BAUDRATE);
 
     // using Timer4 as update scheduler initialize T4 to update DAC1 after (SYSCLK cycles)/sample have passed.
     Timer4_PWM_Init (SYSCLK, SAMPLE_RATE);

@@ -10,12 +10,12 @@
 
 #include <stdio.h>
 
-#define BAUDRATE     (9600)             // Baud rate of UART in bps
+#define BAUDRATE     9600U              // Baud rate of UART in bps
 
 void main(void)
 {
     unsigned char state;
-    unsigned int  counter = 0;
+    unsigned long int counter = 0;
     static xdata char buffer[4];
     static xdata char buf_test[20];
 

@@ -12,7 +12,7 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#define BAUDRATE     9600               // Baud rate of UART in bps
+#define BAUDRATE     9600U              // Baud rate of UART in bps
 #define SAMPLE_RATE  1000L              // Sample frequency in Hz
 #define TEMP_CHANNEL  (8)
 
@@ -25,7 +25,7 @@ void main(void)
 
     PORT_Init ();
     SYSCLK_Init();
-    UART_Init(SYSCLK, 9600);
+    UART_Init(SYSCLK, BAUDRATE);
 
     ADC0_DACs_Timer3_Init(SYSCLK, SAMPLE_RATE);
     // Needs global interrupts enabled to work
@@ -35,8 +35,8 @@ void main(void)
     // Note: the control loop is in the Interrupts
     while (1)
     {
-        uint16_t temperature;       // temperature in hundredths of a degree C
-        int16_t temp_int, temp_frac;        // integer and fractional portions of temperature
+        uint16_t temperature;           // temperature in hundredths of a degree C
+        uint16_t temp_int, temp_frac;   // integer and fractional portions of temperature
         __xdata char buffer[80];        // character buffer for outputting temperature
 
         // Take the measurement and read the A/D result

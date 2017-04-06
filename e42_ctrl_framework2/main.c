@@ -17,7 +17,8 @@
 #define PWM_FRQ_RATE         10000L     // PWM frequency in Hz
 
 // extras
-#define BAUDRATE     9600               // Baud rate of UART in bps
+#define BAUDRATE     9600U              // Baud rate of UART in bps
+//#define BAUDRATE  38400U              // Baud rate of UART in bps
 #define TEMP_CHANNEL  (8)               // which AD channel measures temperature
 
 void main(void)
@@ -28,8 +29,7 @@ void main(void)
 
     PORT_Init ();
     SYSCLK_Init();
-    UART_Init(SYSCLK, 9600);
-//  UART_Init(SYSCLK, 38400);
+    UART_Init(SYSCLK, BAUDRATE);
 
     ADC0_DACs_Timer3_Init(SYSCLK, CTRL_SAMPLE_RATE);
     // Needs global interrupts enabled to work
@@ -65,8 +65,8 @@ void main(void)
         // Timer4_PWM_SetDuty     (channel, newduty);
 
         {
-            uint16_t temperature;       // temperature in hundredths of a degree C
-            int16_t temp_int, temp_frac;        // integer and fractional portions of temperature
+            uint16_t temperature;           // temperature in hundredths of a degree C
+            uint16_t temp_int, temp_frac;   // integer and fractional portions of temperature
             __xdata char buffer[80];        // character buffer for outputting temperature
     
             temperature = getRecentInput(TEMP_CHANNEL); // Note: Ch8 gain is set to 2, all others 1

@@ -8,7 +8,7 @@
 //-----------------------------------------------------------------------------
 
 
-static __xdata int16_t  input[9];  // sampled 9 input channels values
+static __xdata uint16_t input[9]; // sampled 9 input channels values
 static __xdata uint8_t timing=0;  // a crude semaphore 
 
 //------------------------------------------------------------------------------------

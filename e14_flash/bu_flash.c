@@ -23,7 +23,7 @@ void FLASH_Init(void)
 void FLASH_erase(uint8_t pos)
 {
     __bit EA_SAVE     = EA;             // Preserve Current Interrupt Status
-    uint8_t SFRPAGE_SAVE = SFRPAGE;        // Save Current SFR Page
+    uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save Current SFR Page
     SFRPAGE = LEGACY_PAGE;
     EA     = 0;                         // disable interrupts
 
@@ -46,7 +46,7 @@ void FLASH_erase(uint8_t pos)
 void FLASH_put(uint8_t pos, const void * buffer, uint8_t len)
 {
     __bit EA_SAVE     = EA;             // Preserve Current Interrupt Status
-    uint8_t SFRPAGE_SAVE = SFRPAGE;        // Save Current SFR Page
+    uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save Current SFR Page
     const uint8_t * source = buffer;
     uint8_t i;
     SFRPAGE = LEGACY_PAGE;
@@ -73,7 +73,7 @@ void FLASH_put(uint8_t pos, const void * buffer, uint8_t len)
 void FLASH_get(uint8_t pos, void * buffer, uint8_t len)
 {
     __bit EA_SAVE     = EA;             // Preserve Current Interrupt Status
-    uint8_t SFRPAGE_SAVE = SFRPAGE;        // Save Current SFR Page
+    uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save Current SFR Page
     uint8_t * destination = buffer;
     uint8_t i;
     SFRPAGE = LEGACY_PAGE;
@@ -105,7 +105,7 @@ uint8_t getTouch(void)
 void putTouch(uint8_t value)
 {
     __bit EA_SAVE     = EA;             // Preserve Current Interrupt Status
-    uint8_t SFRPAGE_SAVE = SFRPAGE;        // Save Current SFR Page
+    uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save Current SFR Page
     SFRPAGE = LEGACY_PAGE;
     EA     = 0;                         // disable interrupts
     CCH0CN&= ~0x01;                     // write to flash after each byte instead of after 2/4bytes
@@ -119,5 +119,12 @@ void putTouch(uint8_t value)
 }
 
 
-uint8_t ifFirstTime(void)      { return(getTouch()==0xFF); }
-void          setNotFirstTime(void)  { putTouch(0); }
+uint8_t ifFirstTime(void)
+{
+    return(getTouch()==0xFF);
+}
+
+void setNotFirstTime(void)
+{ 
+    putTouch(0);
+}

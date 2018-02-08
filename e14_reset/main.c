@@ -6,7 +6,7 @@
 #include "bu_init.h"
 #include "bu_uart.h"
 #include "bu_com.h"
-#include "bu_flash.h"
+#include "bu_reset.h"
 
 #include <stdint.h>
 
@@ -25,14 +25,15 @@ void main(void)
     PORT_Init();
     SYSCLK_Init();
     UART_Init(SYSCLK, BAUDRATE);
-    FLASH_Init();
- 
-    if (ifFirstTime()) {
-        UART_puts("System started\n");
-        setNotFirstTime();
-    } else {
-        UART_puts("System rebooted\n");
-    }
+
+    state = getResetSource();
+    if ( 0 != state & RESET_BY_EXTRST ) UART_puts("Reset source: External Reset\n");
+    if ( 0 != state & RESET_BY_PWRLEV ) UART_puts("Reset source: Power Level\n");
+    if ( 0 != state & RESET_BY_MISCLK ) UART_puts("Reset source: Missing Clock\n");
+    if ( 0 != state & RESET_BY_WCHDOG ) UART_puts("Reset source: Watchdog\n");
+    if ( 0 != state & RESET_BY_INTRST ) UART_puts("Reset source: Internal Software Reset\n");
+    if ( 0 != state & RESET_BY_CMPRST ) UART_puts("Reset source: Comparator\n");
+    if ( 0 != state & RESET_BY_CNVRST ) UART_puts("Reset source: Converter\n");
 
     UART_puts("End of the demo. Press RESET to try again.\n");
 

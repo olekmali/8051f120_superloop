@@ -69,13 +69,13 @@ __code const int16_t SINE_TABLE[128] = { // half - 128, full - 256
 //
 void DAC0_Timer3_Init (uint32_t sysclock, uint32_t rate)
 {
-    uint8_t SFRPAGE_SAVE = SFRPAGE;        // Save Current SFR page
-    uint16_t counts = (uint16_t)( sysclock/(12L*rate) ); // Note that timer3 is connected to SYSCLK/12
+    uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save the current SFR page
+    uint16_t counts = (uint16_t)( sysclock/(12UL*rate) ); // Note that timer3 is connected to SYSCLK/12
 
     sampling = rate;
     phase_add  = (uint16_t)((628L * frequency * 65536) / sampling / 100);
 
-    SFRPAGE = DAC0_PAGE;                // set SFR page
+    SFRPAGE = DAC0_PAGE;                // set the SFR page to allow access to the necessary SFRs
     REF0CN  = 0x03;                     // enable: 0x01 on-chip VREF, 0x02 VREF output buffer for ADC and DAC, and 0x04 temp sensor
     DAC0CN  = 0x8F;                     // enable DAC0 left justified, and set up to out on Timer4 overflow, 
                                         // 1------- enable
@@ -86,17 +86,17 @@ void DAC0_Timer3_Init (uint32_t sysclock, uint32_t rate)
                                         // ---10--- execute on Timer4 overflow 
                                         // ---11--- execute on Timer2 overflow
 
-    SFRPAGE = TMR3_PAGE;                // set SFR page
+    SFRPAGE = TMR3_PAGE;                // set the SFR page to allow access to the necessary SFRs
     TMR3CN  = 0x00;                     // Stop Timer3; Clear TF3;
     TMR3CF  = 0x00;                     // use SYSCLK/12 as timebase
 //  TMR3CF  = 0x08;                     // use SYSCLK as timebase
-    RCAP3   = (uint16_t)( 65536U - counts ); // Init reload values
+    RCAP3   = (uint16_t)(65536UL - counts); // Set the timer reload value to ensure the desired interrupt frequency
     // or   = -counts; -- see the in class comment
     TMR3    = 0xffff;                   // set to reload immediately
     EIE2   |= 0x01;                     // enable Timer3 interrupts - bit 00000001 or ET3 = 1;
     TMR3CN |= 0x04;                     // start Timer3
 
-    SFRPAGE = SFRPAGE_SAVE;             // Restore SFR page
+    SFRPAGE = SFRPAGE_SAVE;             // Restore the original SFR page
 }
 
 //------------------------------------------------------------------------------------
@@ -110,7 +110,7 @@ void DAC0_Timer3_SetType(Waveform newtype)
 
 void DAC0_Timer3_SetFrequency(uint16_t newfrequency)
 {
-    __bit EA_SAVE     = EA;             // Preserve Current Interrupt Status
+    __bit EA_SAVE     = EA;             // Preserve the current Interrupt Status
     EA = 0;                             // disable interrupts
     if (newfrequency<1) newfrequency=1;
     frequency = newfrequency;
@@ -120,7 +120,7 @@ void DAC0_Timer3_SetFrequency(uint16_t newfrequency)
 
 void DAC0_Timer3_SetAmplitude(uint8_t newamplitude)
 {
-    __bit EA_SAVE     = EA;             // Preserve Current Interrupt Status
+    __bit EA_SAVE     = EA;             // Preserve the current Interrupt Status
     EA = 0;                             // disable interrupts
     if (newamplitude>100) newamplitude=100;
     amplitude = (uint32_t)PHASE_PREC * newamplitude / 100;
@@ -129,7 +129,7 @@ void DAC0_Timer3_SetAmplitude(uint8_t newamplitude)
 
 void DAC0_Timer3_SetOffset(uint8_t newoffset)
 {
-    __bit EA_SAVE     = EA;             // Preserve Current Interrupt Status
+    __bit EA_SAVE     = EA;             // Preserve the current Interrupt Status
     EA = 0;                             // disable interrupts
     if (newoffset>100) newoffset=100;
     offset = (uint32_t)PHASE_PREC * newoffset / 100;
@@ -159,7 +159,7 @@ void DAC0_Timer3_ISR (void) __interrupt 14 // __using 3
     int32_t temp2;                              // temp1 adjusted with current amplitude
 
     // we are on TMR3_PAGE page right now
-    // SFRPAGE = TMR3_PAGE;                     // set SFR page
+    // SFRPAGE = TMR3_PAGE;                     // set the SFR page to allow access to the necessary SFRs
     TF3 = 0;                                    // clear TF3 overflow flag
 
     phase_acc += phase_add;                     // increment phase accumulator
@@ -216,7 +216,7 @@ void DAC0_Timer3_ISR (void) __interrupt 14 // __using 3
     temp2 = (int32_t)amplitude * ( (int32_t)temp1 + (int32_t)(offset - PHASE_HALF) );
     temp1 = (int16_t)(temp2 >> 16);   // take only the two most significnat bytes
     
-    SFRPAGE = DAC0_PAGE;                // set SFR page
+    SFRPAGE = DAC0_PAGE;                // set the SFR page to allow access to the necessary SFRs
     DAC0 = 0x8000 ^ temp1;              // Add a DC bias to make the rails 0 to 65535
     // DAC0 = 0x8000 + temp1;   // ^ trick works on the most significant digit only
     //                          // also prevents undefined roll over of signed short int16_t

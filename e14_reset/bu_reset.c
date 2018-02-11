@@ -5,12 +5,12 @@
 uint8_t getResetSource()
 {
     uint8_t reason;
-    uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save Current SFR Page
+    uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save the current SFR page
     SFRPAGE = LEGACY_PAGE;
 
     reason = RSTSRC;
 
-    SFRPAGE= SFRPAGE_SAVE;              // Restore SFR page
+    SFRPAGE= SFRPAGE_SAVE;              // Restore the original SFR page
     return(reason);
 }
 

@@ -22,8 +22,8 @@ void FLASH_Init(void)
 
 void FLASH_erase(uint8_t pos)
 {
-    __bit EA_SAVE     = EA;             // Preserve Current Interrupt Status
-    uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save Current SFR Page
+    __bit EA_SAVE     = EA;             // Preserve the current Interrupt Status
+    uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save the current SFR page
     SFRPAGE = LEGACY_PAGE;
     EA     = 0;                         // disable interrupts
 
@@ -39,14 +39,14 @@ void FLASH_erase(uint8_t pos)
     FLSCL &= ~0x01;                     // disable FLASH write/erase
 
     EA     = EA_SAVE;                   // restore interrupts
-    SFRPAGE= SFRPAGE_SAVE;              // Restore SFR page
+    SFRPAGE= SFRPAGE_SAVE;              // Restore the original SFR page
 }
 
 
 void FLASH_put(uint8_t pos, const void * buffer, uint8_t len)
 {
-    __bit EA_SAVE     = EA;             // Preserve Current Interrupt Status
-    uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save Current SFR Page
+    __bit EA_SAVE     = EA;             // Preserve the current Interrupt Status
+    uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save the current SFR page
     const uint8_t * source = buffer;
     uint8_t i;
     SFRPAGE = LEGACY_PAGE;
@@ -66,14 +66,14 @@ void FLASH_put(uint8_t pos, const void * buffer, uint8_t len)
     FLSCL &= ~0x01;                     // disable FLASH write/erase
 
     EA     = EA_SAVE;                   // restore interrupts
-    SFRPAGE= SFRPAGE_SAVE;              // Restore SFR page
+    SFRPAGE= SFRPAGE_SAVE;              // Restore the original SFR page
 }
 
 
 void FLASH_get(uint8_t pos, void * buffer, uint8_t len)
 {
-    __bit EA_SAVE     = EA;             // Preserve Current Interrupt Status
-    uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save Current SFR Page
+    __bit EA_SAVE     = EA;             // Preserve the current Interrupt Status
+    uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save the current SFR page
     uint8_t * destination = buffer;
     uint8_t i;
     SFRPAGE = LEGACY_PAGE;
@@ -90,7 +90,7 @@ void FLASH_get(uint8_t pos, void * buffer, uint8_t len)
     PSCTL &= ~0x04;                     // disable reading from the scratch-pad FLASH instead of from FLASH
 
     EA     = EA_SAVE;                   // restore interrupts
-    SFRPAGE= SFRPAGE_SAVE;              // Restore SFR page
+    SFRPAGE= SFRPAGE_SAVE;              // Restore the original SFR page
 }
 
 // ... do the same for area 2
@@ -104,8 +104,8 @@ uint8_t getTouch(void)
 
 void putTouch(uint8_t value)
 {
-    __bit EA_SAVE     = EA;             // Preserve Current Interrupt Status
-    uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save Current SFR Page
+    __bit EA_SAVE     = EA;             // Preserve the current Interrupt Status
+    uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save the current SFR page
     SFRPAGE = LEGACY_PAGE;
     EA     = 0;                         // disable interrupts
     CCH0CN&= ~0x01;                     // write to flash after each byte instead of after 2/4bytes
@@ -115,7 +115,7 @@ void putTouch(uint8_t value)
     PSCTL &= ~0x00;                     // disable the FLASH
     FLSCL &= ~0x01;                     // disable FLASH write/erase
     EA     = EA_SAVE;                   // restore interrupts
-    SFRPAGE= SFRPAGE_SAVE;              // Restore SFR page
+    SFRPAGE= SFRPAGE_SAVE;              // Restore the original SFR page
 }
 
 

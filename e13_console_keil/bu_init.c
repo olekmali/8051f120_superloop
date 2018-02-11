@@ -14,9 +14,9 @@
 //
 void PORT_Init(void)
 {
-    char SFRPAGE_SAVE = SFRPAGE;    // Save Current SFR page
+    char SFRPAGE_SAVE = SFRPAGE;    // Save the current SFR page
 
-    SFRPAGE = CONFIG_PAGE;          // set SFR page
+    SFRPAGE = CONFIG_PAGE;          // set the SFR page to allow access to the necessary SFRs
     P0MDOUT |= 0x01;                // Set TX1 pin to push-pull
     P1MDOUT |= 0x40;                // Set P1.6(TB_LED) to push-pull
 //  P2MDOUT |= 0x00;
@@ -47,7 +47,7 @@ void PORT_Init(void)
     XBR1 = 0x04;                    // Enable INT0 input pin, this puts /INT0 on P0.3.
     XBR2 = 0x44;                    // Enable crossbar and weak pull-up, Enable UART1
 
-    SFRPAGE = SFRPAGE_SAVE;         // Restore SFR page
+    SFRPAGE = SFRPAGE_SAVE;         // Restore the original SFR page
 }
 
 //-----------------------------------------------------------------------------
@@ -59,8 +59,8 @@ void PORT_Init(void)
 void SYSCLK_Init(void)
 {
     volatile int i;                 // software delay variable
-    char SFRPAGE_SAVE = SFRPAGE;    // Save Current SFR page
-    SFRPAGE = CONFIG_PAGE;          // set SFR page
+    char SFRPAGE_SAVE = SFRPAGE;    // Save the current SFR page
+    SFRPAGE = CONFIG_PAGE;          // set the SFR page to allow access to the necessary SFRs
 
     OSCICN = 0x83;                  // set internal oscillator to run
                                     // at its maximum frequency
@@ -84,5 +84,5 @@ void SYSCLK_Init(void)
     SFRPAGE = LEGACY_PAGE;
     FLSCL   = 0x30;                 // Set FLASH read time for 100 MHz clk
 
-    SFRPAGE = SFRPAGE_SAVE;         // Restore SFR page
+    SFRPAGE = SFRPAGE_SAVE;         // Restore the original SFR page
 }

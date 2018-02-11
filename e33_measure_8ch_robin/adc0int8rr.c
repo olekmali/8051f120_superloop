@@ -22,15 +22,15 @@ uint16_t result[9];                 // ADC0 decimated value - visible outside by
 //
 void ADC0_Timer3_Init (uint32_t sysclock, uint32_t rate)
 {
-    uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save Current SFR page
-    uint16_t counts = (uint16_t)( sysclock/(12L*rate) ); // Init Timer3 to generate interrupts at a RATE Hz rate.
+    uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save the current SFR page
+    uint16_t counts = (uint16_t)( sysclock/(12UL*rate) ); // Init Timer3 to generate interrupts at a RATE Hz rate.
                                         // Note that timer3 is connected to SYSCLK
 
-    SFRPAGE = TMR3_PAGE;                // set SFR page
+    SFRPAGE = TMR3_PAGE;                // set the SFR page to allow access to the necessary SFRs
     TMR3CN  = 0x00;                     // Stop Timer3; Clear TF3;
 //  TMR3CF  = 0x00;                     // use SYSCLK/12 as timebase
     TMR3CF  = 0x08;                     // use SYSCLK as timebase
-    RCAP3   = (uint16_t)(65536U - counts); // Init reload values
+    RCAP3   = (uint16_t)(65536UL - counts); // Set the timer reload value to ensure the desired interrupt frequency
     // or   = -counts; -- see the in class comment
     TMR3    = RCAP3;                    // set to reload immediately
     EIE2   &= ~0x01;                    // DISABLE Timer3 interrupts
@@ -65,7 +65,7 @@ void ADC0_Timer3_Init (uint32_t sysclock, uint32_t rate)
     AD0EN = 1;                          // enable ADC
     // Remember to enable global interrupts when ready
 
-    SFRPAGE = SFRPAGE_SAVE;             // Restore SFR page
+    SFRPAGE = SFRPAGE_SAVE;             // Restore the original SFR page
 }
 
 
@@ -109,7 +109,7 @@ void setGain(uint8_t gain)
     -----10x => *16
     -----11x => /2
 */
-    uint8_t SFRPAGE_SAVE = SFRPAGE;        // Save Current SFR page
+    uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save the current SFR page
     uint8_t saveEA = EA;          // save interrupt enabled status
 
     uint8_t encoded=0;
@@ -122,7 +122,7 @@ void setGain(uint8_t gain)
     EA = 0;                             // disable interrupts
     ADC0CF = (ADC0CF & 0xF8) | ( encoded & 0x07); // set the gain
     EA = saveEA;                        // re-enable interrupts if were enabled
-    SFRPAGE = SFRPAGE_SAVE;             // Restore SFR page
+    SFRPAGE = SFRPAGE_SAVE;             // Restore the original SFR page
 }
 
 

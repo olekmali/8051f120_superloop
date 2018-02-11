@@ -21,12 +21,12 @@ void reinit_sysclk(uint8_t mode)
 {
      // Note: modify the outline below as necessary
     volatile int16_t i;                 // software delay variable
-    uint8_t SFRPAGE_SAVE = SFRPAGE;    // Save Current SFR page
+    uint8_t SFRPAGE_SAVE = SFRPAGE;    // Save the current SFR page
     __bit EA_SAVE     = EA;         // Preserve Current Interrupt Status
     
     if ( SYSCLK_no_change == mode) return;
 
-    SFRPAGE = CONFIG_PAGE;          // set SFR page
+    SFRPAGE = CONFIG_PAGE;          // set the SFR page to allow access to the necessary SFRs
     EA = 0;                         // disable interrupts
 
 
@@ -116,6 +116,6 @@ void reinit_sysclk(uint8_t mode)
         // disable internal oscillator
     }
 
-    SFRPAGE = SFRPAGE_SAVE;         // Restore SFR page
+    SFRPAGE = SFRPAGE_SAVE;         // Restore the original SFR page
     EA = EA_SAVE;                   // restore interrupts
 }

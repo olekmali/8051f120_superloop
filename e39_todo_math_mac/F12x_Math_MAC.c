@@ -340,9 +340,9 @@ void SYSCLK_Init (void)
 {
    int16_t i;                              // software timer
 
-   uint8_t SFRPAGE_SAVE = SFRPAGE;        // Save Current SFR page
+   uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save the current SFR page
 
-   SFRPAGE = CONFIG_PAGE;              // set SFR page
+   SFRPAGE = CONFIG_PAGE;              // set the SFR page to allow access to the necessary SFRs
 
    OSCICN = 0x83;                      // set internal oscillator to run
                                        // at its maximum frequency
@@ -370,7 +370,7 @@ void SYSCLK_Init (void)
    while(!(PLL0CN & 0x10));            // Wait until PLL frequency is locked
    CLKSEL  = 0x02;                     // Select PLL as SYSCLK source
 
-   SFRPAGE = SFRPAGE_SAVE;             // Restore SFR page
+   SFRPAGE = SFRPAGE_SAVE;             // Restore the original SFR page
 }
 
 //-----------------------------------------------------------------------------
@@ -385,7 +385,7 @@ void SYSCLK_Init (void)
 //-----------------------------------------------------------------------------
 void UART_Init (void)
 {
-   uint8_t SFRPAGE_SAVE = SFRPAGE;        // Save Current SFR page
+   uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save the current SFR page
 
    SFRPAGE = UART_PAGE;
    SCON1   = 0x10;                     // SCON1: mode 0, 8-bit UART, enable RX
@@ -419,7 +419,7 @@ void UART_Init (void)
    SFRPAGE = UART_PAGE;
    TI1 = 1;                            // Indicate TX1 ready
 
-   SFRPAGE = SFRPAGE_SAVE;             // Restore SFR page
+   SFRPAGE = SFRPAGE_SAVE;             // Restore the original SFR page
 
 }
 
@@ -437,9 +437,9 @@ void UART_Init (void)
 //-----------------------------------------------------------------------------
 void PORT_Init (void)
 {
-   uint8_t SFRPAGE_SAVE = SFRPAGE;        // Save Current SFR page
+   uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save the current SFR page
 
-   SFRPAGE = CONFIG_PAGE;              // set SFR page
+   SFRPAGE = CONFIG_PAGE;              // set the SFR page to allow access to the necessary SFRs
 
    XBR0     = 0x00;
    XBR1     = 0x00;
@@ -448,6 +448,6 @@ void PORT_Init (void)
 
    P0MDOUT |= 0x01;                    // Set TX1 pin to push-pull
 
-   SFRPAGE = SFRPAGE_SAVE;             // Restore SFR page
+   SFRPAGE = SFRPAGE_SAVE;             // Restore the original SFR page
 }
 

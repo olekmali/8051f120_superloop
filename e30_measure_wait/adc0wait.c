@@ -12,7 +12,7 @@
 //
 void ADC0_Wait_Init(uint32_t sysclock)
 {
-    uint8_t SFRPAGE_SAVE = SFRPAGE;        // Save Current SFR page
+    uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save the current SFR page
 
     SFRPAGE = ADC0_PAGE;
     // ADC0 Control
@@ -40,7 +40,7 @@ void ADC0_Wait_Init(uint32_t sysclock)
     // EIE2 |= 0x02;                    // enable ADC interrupts when the conversion is complete - not needed
     AD0EN = 1;                          // enable ADC
  
-    SFRPAGE = SFRPAGE_SAVE;             // Restore SFR page
+    SFRPAGE = SFRPAGE_SAVE;             // Restore the original SFR page
 }
 
 
@@ -60,7 +60,7 @@ void setGain(uint8_t gain)
     -----10x => *16
     -----11x => /2
 */
-    uint8_t SFRPAGE_SAVE = SFRPAGE;        // Save Current SFR page
+    uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save the current SFR page
 
     uint8_t encoded=0;
     while(gain>1)
@@ -72,7 +72,7 @@ void setGain(uint8_t gain)
     SFRPAGE = ADC0_PAGE;
     ADC0CF = (ADC0CF & 0xF8) | ( encoded & 0x07);
 
-    SFRPAGE = SFRPAGE_SAVE;             // Restore SFR page
+    SFRPAGE = SFRPAGE_SAVE;             // Restore the original SFR page
 }
 
 
@@ -84,12 +84,12 @@ void setGain(uint8_t gain)
 //
 void setChannel(uint8_t channel)
 {
-    uint8_t SFRPAGE_SAVE = SFRPAGE;        // Save Current SFR page
+    uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save the current SFR page
     SFRPAGE = ADC0_PAGE;
 
     AMX0SL = channel;
 
-    SFRPAGE = SFRPAGE_SAVE;             // Restore SFR page
+    SFRPAGE = SFRPAGE_SAVE;             // Restore the original SFR page
 }
 
 
@@ -101,7 +101,7 @@ void setChannel(uint8_t channel)
 //
 uint16_t getADC0()
 {
-    uint8_t SFRPAGE_SAVE = SFRPAGE;        // Save Current SFR page
+    uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save the current SFR page
     uint16_t result;
 
     SFRPAGE = ADC0_PAGE;
@@ -114,6 +114,6 @@ uint16_t getADC0()
 
     result = ADC0;
 
-    SFRPAGE = SFRPAGE_SAVE;             // Restore SFR page
+    SFRPAGE = SFRPAGE_SAVE;             // Restore the original SFR page
     return(result);
 }

@@ -31,17 +31,17 @@ uint8_t PCA0CN_mask = 0xBF;       // mask for bits: 10111111, see doc for PCA0CN
 //
 void PCA0_Init()
 {
-    uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save Current SFR page
+    uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save the current SFR page
     uint8_t modeN = 0x49;               // 0x4- sets counter to 16-bit comparator mode
                                         //      AM: do not set to C to enforce 16bit mode separately
                                         // 0x-8 to enable comparator match to be detected and set
                                         // 0x-1 to enable comparator interrupt after match is detected
                                         // 0x-2 to (toggle) output for PWM - it can be routed to port pins or/and read from reg
 
-    SFRPAGE   = CONFIG_PAGE;            // set SFR page
+    SFRPAGE   = CONFIG_PAGE;            // set the SFR page to allow access to the necessary SFRs
     P3MDOUT  |= 0x3F;                   // Set P3.0 through P3.5 to push-pull
 
-    SFRPAGE   = PCA0_PAGE;              // set SFR page
+    SFRPAGE   = PCA0_PAGE;              // set the SFR page to allow access to the necessary SFRs
     PCA0CN    = 0x00;                   // reset counter interrupt bits and disable the counter -0------
     PCA0MD    = 0x03;                   // ----SRC- controls the SouRCe of the counting
                                         //     000  - SYSCLK/12
@@ -81,7 +81,7 @@ void PCA0_Init()
     SFRPAGE   = CONFIG_PAGE;
     EIE1     |= 0x08;                   // Enable PCA0 interrupt at EIE1.3
 
-    SFRPAGE = SFRPAGE_SAVE;             // Restore SFR page
+    SFRPAGE = SFRPAGE_SAVE;             // Restore the original SFR page
 }
 
 //-----------------------------------------------------------------------------
@@ -89,14 +89,14 @@ void PCA0_Init()
 //-----------------------------------------------------------------------------
 //
 // This ISR is called on event in any of PCA0 comparators or PCA0 counter overflow.
-// If we could output PCA0CN diurectly to P0.3-P0.6 then manual copying to P3
-// would have been unnecesssary. However, crossbar is set tu map /INT0 to P0.3
+// If we could output PCA0CN directly to P0.3-P0.6 then manual copying to P3
+// would have been unnecessary. However, crossbar is set tu map /INT0 to P0.3
 // that is used by Ethernet board and TCP/IP stack library later on
 //
 void PCA0_ISR (void) __interrupt 9  __using 3
 {
     uint8_t intsrc;
-    SFRPAGE = PCA0_PAGE;                // set SFR page
+    SFRPAGE = PCA0_PAGE;                // set the SFR page to allow access to the necessary SFRs
     intsrc  = PCA0CN & PCA0CN_mask;     // check the interrupt source and mask it with action enable register
     PCA0CN  = 0x40;                     // We always must clear PCA0 interrupt flags manually!
 
@@ -114,7 +114,7 @@ void PCA0_ISR (void) __interrupt 9  __using 3
 
 void PCA0_SetOn(uint8_t channel, PWMstate newstate)
 {
-    __bit EA_SAVE     = EA;             // Preserve Current Interrupt Status
+    __bit EA_SAVE     = EA;             // Preserve the current Interrupt Status
     EA = 0;                             // disable interrupts
     if (newstate==ON)
     {
@@ -130,8 +130,8 @@ void PCA0_SetDuty(uint8_t channel, uint8_t newduty)
 {
     uint16_t value;
     uint8_t hi, lo;
-    uint8_t SFRPAGE_SAVE = SFRPAGE;        // Save Current SFR page
-    __bit EA_SAVE     = EA;             // Preserve Current Interrupt Status
+    uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save the current SFR page
+    __bit EA_SAVE     = EA;             // Preserve the current Interrupt Status
     EA = 0;                             // disable interrupts
 
     value = (uint16_t)((((( 100 - newduty) * 0xFFFFL) / 50) +1)>>1);
@@ -149,7 +149,7 @@ void PCA0_SetDuty(uint8_t channel, uint8_t newduty)
     hi = (uint8_t) (value >> 8);
 
     // Note: PCA0 requires that we load low byte first and must follow with high byte next
-    SFRPAGE   = PCA0_PAGE;              // set SFR page
+    SFRPAGE   = PCA0_PAGE;              // set the SFR page to allow access to the necessary SFRs
     switch(channel) {
         case 0: PCA0CPL0 = lo; PCA0CPH0 = hi; break;
         case 1: PCA0CPL1 = lo; PCA0CPH1 = hi; break;
@@ -165,5 +165,5 @@ void PCA0_SetDuty(uint8_t channel, uint8_t newduty)
     // on the PCA0 counter overflow to avoid strange spikes"
 
     EA = EA_SAVE;                       // restore interrupts
-    SFRPAGE = SFRPAGE_SAVE;             // Restore SFR page
+    SFRPAGE = SFRPAGE_SAVE;             // Restore the original SFR page
 }

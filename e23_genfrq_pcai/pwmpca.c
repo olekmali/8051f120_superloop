@@ -37,8 +37,8 @@ __xdata uint16_t  PCAnextComp[6] = {0, 0, 0, 0, 0, 0};
 //
 void PCA0_PWM_Init(uint32_t sysclk)
 {
-    uint8_t SFRPAGE_SAVE = SFRPAGE;        // Save Current SFR page
-    uint8_t modeN = 0x49;         // 0x4- sets counter to 16-bit comparator mode
+    uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save the current SFR page
+    uint8_t modeN = 0x49;               // 0x4- sets counter to 16-bit comparator mode
                                         //      AM: do not set to C to enforce 16bit mode separately
                                         // 0x-8 to enable comparator match to be detected and set
                                         // 0x-1 to enable comparator interrupt after match is detected
@@ -46,10 +46,10 @@ void PCA0_PWM_Init(uint32_t sysclk)
 
     systemclock = sysclk;
 
-    SFRPAGE = CONFIG_PAGE;              // set SFR page
+    SFRPAGE = CONFIG_PAGE;              // set the SFR page to allow access to the necessary SFRs
     P3MDOUT |= 0x3F;                    // Set P3.0 through P3.5 to push-pull
 
-    SFRPAGE   = PCA0_PAGE;              // set SFR page
+    SFRPAGE   = PCA0_PAGE;              // set the SFR page to allow access to the necessary SFRs
     PCA0CN    = 0x00;                   // reset counter interrupt bits and disable the counter -0------
     PCA0MD    = 0x00;                   // ----SRC- controls the SouRCe of the counting
                                         //     000  - SYSCLK/12
@@ -82,7 +82,7 @@ void PCA0_PWM_Init(uint32_t sysclk)
     SFRPAGE   = CONFIG_PAGE;
     EIE1     |= 0x08;                   // Enable PCA0 interrupt at EIE1.3
 
-    SFRPAGE = SFRPAGE_SAVE;             // Restore SFR page
+    SFRPAGE = SFRPAGE_SAVE;             // Restore the original SFR page
 }
 
 //-----------------------------------------------------------------------------
@@ -97,7 +97,7 @@ void PCA0_PWM_Init(uint32_t sysclk)
 void PCA0_PWM_ISR (void) __interrupt 9 __using 3
 {
     uint8_t intsrc;
-    SFRPAGE = PCA0_PAGE;                // set SFR page
+    SFRPAGE = PCA0_PAGE;                // set the SFR page to allow access to the necessary SFRs
     intsrc  = PCA0CN;                   // check the interrupt source as quickly as possible
     PCA0CN  = 0x40;                     // we always must clear PCA0 interrupt flags manually - do it immediately
                                         // to avoid resetting overflows that happened next and were not recorded in the step above
@@ -152,7 +152,7 @@ void PCA0_PWM_ISR (void) __interrupt 9 __using 3
 
 void PCA0_PWM_SetOn(uint8_t channel, PWMstate newstate)
 {
-    __bit EA_SAVE     = EA;             // Preserve Current Interrupt Status
+    __bit EA_SAVE     = EA;             // Preserve the current Interrupt Status
     EA = 0;                             // disable interrupts
     if (newstate==ON)
     {
@@ -166,25 +166,25 @@ void PCA0_PWM_SetOn(uint8_t channel, PWMstate newstate)
 
 void PCA0_PWM_SetOffset   (uint8_t channel, uint16_t deltaoffset)
 {
-    uint8_t SFRPAGE_SAVE = SFRPAGE;        // Save Current SFR page
-    __bit EA_SAVE     = EA;             // Preserve Current Interrupt Status
+    uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save the current SFR page
+    __bit EA_SAVE     = EA;             // Preserve the current Interrupt Status
     EA = 0;                             // disable interrupts
 
     PCAnextComp[channel] = PCAnextComp[channel] + (int32_t)deltaoffset * PCAincrComp[channel] / 180;
 
     EA = EA_SAVE;                       // restore interrupts
-    SFRPAGE = SFRPAGE_SAVE;             // Restore SFR page
+    SFRPAGE = SFRPAGE_SAVE;             // Restore the original SFR page
 }
 
 void PCA0_PWM_SetFrequency(uint8_t channel, uint32_t newfrequency)
 {
-    uint8_t SFRPAGE_SAVE = SFRPAGE;        // Save Current SFR page
-    __bit EA_SAVE     = EA;             // Preserve Current Interrupt Status
+    uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save the current SFR page
+    __bit EA_SAVE     = EA;             // Preserve the current Interrupt Status
     EA = 0;                             // disable interrupts
 
     PCAincrComp[channel] = ((systemclock>>2)/newfrequency)>>1;
                         //   ^^^^^^^^^^^^^^ PCA source frequency
 
     EA = EA_SAVE;                       // restore interrupts
-    SFRPAGE = SFRPAGE_SAVE;             // Restore SFR page
+    SFRPAGE = SFRPAGE_SAVE;             // Restore the original SFR page
 }

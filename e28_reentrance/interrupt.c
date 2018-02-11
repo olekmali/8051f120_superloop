@@ -13,23 +13,23 @@
 //
 void Timer4_Init (uint32_t sysclock, uint32_t rate)
 {
-    uint8_t SFRPAGE_SAVE = SFRPAGE;        // Save Current SFR page
-   uint16_t counts = (uint16_t)( sysclock/(12L*rate) ); // Note that Timer4 is connected to SYSCLK/12
+    uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save the current SFR page
+   uint16_t counts = (uint16_t)( sysclock/(12UL*rate) ); // Note that Timer4 is connected to SYSCLK/12
 
-    SFRPAGE = CONFIG_PAGE;              // set SFR page
+    SFRPAGE = CONFIG_PAGE;              // set the SFR page to allow access to the necessary SFRs
     P3MDOUT |= 0x3F;                    // Set P3.0 through P3.5 to push-pull
 
-    SFRPAGE = TMR4_PAGE;                // set SFR page
+    SFRPAGE = TMR4_PAGE;                // set the SFR page to allow access to the necessary SFRs
     TMR4CN  = 0x00;                     // Stop Timer4; Clear TF4;
     TMR4CF  = 0x00;                     // use SYSCLK/12 as timebase
 //  TMR4CF  = 0x08;                     // use SYSCLK as timebase
-    RCAP4   = (uint16_t)(65536U - counts); // Init reload values
+    RCAP4   = (uint16_t)(65536UL - counts); // Set the timer reload value to ensure the desired interrupt frequency
     // or   = -counts; -- see the in class comment
     TMR4    = RCAP4;                    // set starting value
     EIE2   |= 0x04;                     // enable Timer4 interrupts - bit 00000100 or ET4 = 1;
     TMR4CN |= 0x04;                     // start Timer4
 
-    SFRPAGE = SFRPAGE_SAVE;             // Restore SFR page
+    SFRPAGE = SFRPAGE_SAVE;             // Restore the original SFR page
 }
 
 //------------------------------------------------------------------------------------
@@ -58,7 +58,7 @@ void Timer4_ISR (void) __interrupt 16
     const int32_t Q = MODULUS / MULTIPLIER;
     const int32_t R = MODULUS % MULTIPLIER;
     
-    SFRPAGE = TMR4_PAGE;            // set SFR page
+    SFRPAGE = TMR4_PAGE;            // set the SFR page to allow access to the necessary SFRs
     TMR4CN &= ~0x80;                // clear T4 overflow flag
 
     seed = MULTIPLIER * (seed % Q) - R * (seed / Q);

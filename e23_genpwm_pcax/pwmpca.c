@@ -24,14 +24,14 @@
 //
 void PCA0_Init()
 {
-    uint8_t SFRPAGE_SAVE = SFRPAGE;        // Save Current SFR page
-    uint8_t modeN = 0xCB;         // 0x4- sets counter to 16-bit comparator mode
+    uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save the current SFR page
+    uint8_t modeN = 0xCB;               // 0x4- sets counter to 16-bit comparator mode
                                         //      AM: do not set to C to enforce 16bit mode separately
                                         // 0x-8 to enable comparator match to be detected and set
                                         // 0x-1 to enable comparator interrupt after match is detected
                                         // 0x-4 to (toggle) output for PWM - it can be routed to port pins or/and read from reg
 
-    SFRPAGE   = CONFIG_PAGE;            // set SFR page
+    SFRPAGE   = CONFIG_PAGE;            // set the SFR page to allow access to the necessary SFRs
     P0MDOUT  |= 0xFC;                   // Set P0.2 through P0.8 to push-pull, keep current state of P0.0 and P0.1
     XBR0 = 0x30;    // Close UART0, open UART1, _but_ Close CP0 and /INT0 which prevents Ethernet drivers from working
 
@@ -39,7 +39,7 @@ void PCA0_Init()
     XBR1 = 0x00;    // Open PCA counters 0 through 5 to P0.2 through P0.7 pins which creates problems on Ethernet extensions
     XBR2 = 0x44;    // Enable crossbar and weak pull-up
 
-    SFRPAGE   = PCA0_PAGE;              // set SFR page
+    SFRPAGE   = PCA0_PAGE;              // set the SFR page to allow access to the necessary SFRs
     PCA0CN    = 0x00;                   // reset counter interrupt bits and disable the counter -0------
     PCA0MD    = 0x03;                   // ----SRC- controls the SouRCe of the counting
                                         //     000  - SYSCLK/12
@@ -81,12 +81,12 @@ void PCA0_Init()
 
 //  EIE1     &= ~0x08;                  // Disable PCA0 interrupt at EIE1.3
 
-    SFRPAGE = SFRPAGE_SAVE;             // Restore SFR page
+    SFRPAGE = SFRPAGE_SAVE;             // Restore the original SFR page
 }
 
 void PCA0_SetOn(uint8_t channel, PWMstate newstate)
 {
-    __bit EA_SAVE     = EA;             // Preserve Current Interrupt Status
+    __bit EA_SAVE     = EA;             // Preserve the current Interrupt Status
     EA = 0;                             // disable interrupts
     if (newstate==ON)
     {
@@ -117,8 +117,8 @@ void PCA0_SetDuty(uint8_t channel, uint8_t newduty)
 {
     uint16_t value;
     uint8_t hi, lo;
-    uint8_t SFRPAGE_SAVE = SFRPAGE;        // Save Current SFR page
-    __bit EA_SAVE     = EA;             // Preserve Current Interrupt Status
+    uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save the current SFR page
+    __bit EA_SAVE     = EA;             // Preserve the current Interrupt Status
     EA = 0;                             // disable interrupts
 
     value = (uint16_t)((((( 100 - newduty) * 0xFFFFL) / 50) +1)>>1);
@@ -136,7 +136,7 @@ void PCA0_SetDuty(uint8_t channel, uint8_t newduty)
     hi = (uint8_t) (value >> 8);
 
     // Note: PCA0 requires that we load low byte first and must follow with high byte next
-    SFRPAGE   = PCA0_PAGE;              // set SFR page
+    SFRPAGE   = PCA0_PAGE;              // set the SFR page to access PCA
     switch(channel) {
         case 0: PCA0CPL0 = lo; PCA0CPH0 = hi; break;
         case 1: PCA0CPL1 = lo; PCA0CPH1 = hi; break;
@@ -151,5 +151,5 @@ void PCA0_SetDuty(uint8_t channel, uint8_t newduty)
     // read from it on the PCA0 counter overflow to avoid strange spikes
 
     EA = EA_SAVE;                       // restore interrupts
-    SFRPAGE = SFRPAGE_SAVE;             // Restore SFR page
+    SFRPAGE = SFRPAGE_SAVE;             // Restore the original SFR page
 }

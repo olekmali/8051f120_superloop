@@ -29,19 +29,19 @@ uint8_t   lastindex=0;            // index to freq array
 //
 void PCA0_Init()
 {
-    uint8_t SFRPAGE_SAVE = SFRPAGE;        // Save Current SFR page
+    uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save the current SFR page
     uint8_t modeN = 0x21;         // To detect positive edge triggering
                                         // 0x2- to enable capture on positive edge detected
                                         // 0x-1 to enable capture/compare interrupt
 
 
-    SFRPAGE   = CONFIG_PAGE;            // set SFR page
+    SFRPAGE   = CONFIG_PAGE;            // set the SFR page to allow access to the necessary SFRs
     P0MDOUT  &= ~0x02;                  // Set P0.1 pin open drain
     P0       |=  0x02;                  // Set P0.1 pin output high to allow input
     // ** This crossbar change is compatible with Ethernet extension board AB_4 and CMX/Micronet TCP/IP stack **
     XBR0 = 0x08;                        // *****close CP0, Enable CEX0 of PCA0 I/O, Close UART0
 
-    SFRPAGE   = PCA0_PAGE;              // set SFR page
+    SFRPAGE   = PCA0_PAGE;              // set the SFR page to allow access to the necessary SFRs
     PCA0CN    = 0x00;                   // reset counter interrupt bits and disable the counter -0------
     PCA0MD    = 0x00;                   // ----SRC- controls the SouRCe of the counting
                                         //     000  - SYSCLK/12
@@ -82,7 +82,7 @@ void PCA0_Init()
     // ** This interrupt is not compatible with CMX/Micronet TCP/IP stack **
     EIE1     |= 0x08;                   // Enable PCA0 interrupt at EIE1.3
 
-    SFRPAGE = SFRPAGE_SAVE;             // Restore SFR page
+    SFRPAGE = SFRPAGE_SAVE;             // Restore the original SFR page
 }
 
 //-----------------------------------------------------------------------------
@@ -101,7 +101,7 @@ void PCA0_ISR (void) __interrupt 9  __using 3
     uint8_t intsrc;
 
 
-    SFRPAGE = PCA0_PAGE;                // set SFR page
+    SFRPAGE = PCA0_PAGE;                // set the SFR page to allow access to the necessary SFRs
     intsrc  = PCA0CN & PCA0CN_mask;     // Check the interrupt source and mask it with action enable register
     PCA0CN  = 0x40;                     // We always must clear PCA0 interrupt flags manually!
 
@@ -128,7 +128,7 @@ void PCA0_ISR (void) __interrupt 9  __using 3
 uint16_t getRecentPeriod()
 {
     uint16_t res= 0;
-    __bit EA_SAVE     = EA;             // Preserve Current Interrupt Status
+    __bit EA_SAVE     = EA;             // Preserve the current Interrupt Status
     EA = 0;
     res = measurements[lastindex];
     EA = EA_SAVE;
@@ -139,7 +139,7 @@ uint16_t getAveragedPeriod()
 {
     uint32_t sum = 0;
     uint8_t i;
-    __bit EA_SAVE     = EA;             // Preserve Current Interrupt Status
+    __bit EA_SAVE     = EA;             // Preserve the current Interrupt Status
     EA = 0;
     for (i=0; i<MAX_HISTORY; ++i)
         sum += measurements[i];

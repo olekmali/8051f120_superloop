@@ -22,15 +22,15 @@ static uint16_t  Timer3_rate2 = 0;
 // specified by <counts>
 void Timer3_Init (uint32_t sysclock, uint32_t rate, uint16_t rate2)
 {
-    uint8_t SFRPAGE_SAVE = SFRPAGE;        // Save Current SFR page
-    uint16_t counts = (uint16_t)( sysclock/(12L*rate) ); // Init Timer3 to generate interrupts at a RATE Hz rate.
+    uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save the current SFR page
+    uint16_t counts = (uint16_t)( sysclock/(12UL*rate) ); // Init Timer3 to generate interrupts at a RATE Hz rate.
                                         // Note that timer3 is connected to SYSCLK/12
 
-    SFRPAGE = TMR3_PAGE;                // set SFR page
+    SFRPAGE = TMR3_PAGE;                // set the SFR page to allow access to the necessary SFRs
     TMR3CN  = 0x00;                     // Stop Timer3; Clear TF3;
     TMR3CF  = 0x00;                     // use SYSCLK/12 as timebase
 //  TMR3CF  = 0x08;                     // use SYSCLK as timebase
-    RCAP3   = (uint16_t)(65536U - counts); // Init reload values
+    RCAP3   = (uint16_t)(65536UL - counts); // Set the timer reload value to ensure the desired interrupt frequency
     // or   = -counts; -- see the in class comment
     TMR3    = 0xffff;                   // set to reload immediately
     EIE2   |= 0x01;                     // enable Timer3 interrupts - bit 00000001 or ET3 = 1;
@@ -40,7 +40,7 @@ void Timer3_Init (uint32_t sysclock, uint32_t rate, uint16_t rate2)
                                         // so it is the best time to update interrupt parameters
 
     TMR3CN |= 0x04;                     // start Timer3
-    SFRPAGE = SFRPAGE_SAVE;             // Restore SFR page
+    SFRPAGE = SFRPAGE_SAVE;             // Restore the original SFR page
 }
 
 
@@ -100,7 +100,7 @@ void Timer3_ISR (void) __interrupt 14
 #endif
 
     // we are on TMR3_PAGE page right now
-    // SFRPAGE = TMR3_PAGE;             // set SFR page
+    // SFRPAGE = TMR3_PAGE;             // set the SFR page to allow access to the necessary SFRs
     TF3 = 0;                            // clear TF3
     counter++;
 

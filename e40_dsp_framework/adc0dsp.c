@@ -16,15 +16,15 @@
 //
 void ADC0_DACs_Timer3_Init (uint32_t sysclock, uint32_t rate)
 {
-    uint8_t SFRPAGE_SAVE = SFRPAGE;        // Save Current SFR page
-    uint16_t counts = (uint16_t)( sysclock/(12L*rate) );      // Init Timer3 to generate interrupts at a RATE Hz rate.
+    uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save the current SFR page
+    uint16_t counts = (uint16_t)( sysclock/(12UL*rate) );      // Init Timer3 to generate interrupts at a RATE Hz rate.
                                         // Note that timer3 is connected to SYSCLK/12
 
-    SFRPAGE = TMR3_PAGE;                // set SFR page
+    SFRPAGE = TMR3_PAGE;                // set the SFR page to allow access to the necessary SFRs
     TMR3CN  = 0x00;                     // Stop Timer3; Clear TF3;
     TMR3CF  = 0x00;                     // use SYSCLK/12 as timebase
 //  TMR3CF  = 0x08;                     // use SYSCLK as timebase
-    RCAP3   = (uint16_t)( 65536U - counts ); // Init reload values
+    RCAP3   = (uint16_t)(65536UL - counts); // Set the timer reload value to ensure the desired interrupt frequency
     // or   = -counts; -- see the in class comment
     TMR3    = RCAP3;                    // set to reload immediately
     EIE2   &= ~0x01;                    // DISABLE Timer3 interrupts, or simply don't enable them
@@ -60,7 +60,7 @@ void ADC0_DACs_Timer3_Init (uint32_t sysclock, uint32_t rate)
     // Remember to enable global interrupts when ready
 
 
-    SFRPAGE = DAC0_PAGE;                // set SFR page
+    SFRPAGE = DAC0_PAGE;                // set the SFR page to allow access to the necessary SFRs
 //  REF0CN |= 0x07;                     // enable: 0x01 on-chip VREF, 0x02 VREF output buffer for ADC and DAC, and 0x04 temp sensor
     DAC0CN  = 0x8F;                     // enable DAC0 left justified, and set up to out on Timer3 overflow,
                                         // 1------- enable                     <-- this one is used
@@ -72,7 +72,7 @@ void ADC0_DACs_Timer3_Init (uint32_t sysclock, uint32_t rate)
                                         // ---11--- execute on Timer2 overflow
 
 
-    SFRPAGE = SFRPAGE_SAVE;             // Restore SFR page
+    SFRPAGE = SFRPAGE_SAVE;             // Restore the original SFR page
 }
 
 //------------------------------------------------------------------------------------
@@ -163,7 +163,7 @@ void ADC0_ISR (void) __interrupt 15 __using 3
     /* implement the filter above this line */
     }
 
-    SFRPAGE = DAC0_PAGE;                // set SFR page
+    SFRPAGE = DAC0_PAGE;                // set the SFR page to allow access to the necessary SFRs
     DAC0 = 0x8000 ^ bufout[bufndx];
     // 0x8000 ^ value adds a DC bias to make the rails 0 to 65535
     // Note: the XOR with 0x8000 translates the bipolar quantity into a unipolar quantity.

@@ -19,23 +19,23 @@ static uint16_t  Timer3_sem_frequ   = 0;
 //
 void Timer3_Init (uint32_t sysclock, uint32_t rate, uint16_t timing)
 {
-    uint8_t SFRPAGE_SAVE = SFRPAGE;        // Save Current SFR page
-    uint16_t counts = (uint16_t)( sysclock/(12L*rate) ); // Init Timer3 to generate interrupts at a RATE Hz rate.
+    uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save the current SFR page
+    uint16_t counts = (uint16_t)( sysclock/(12UL*rate) ); // Init Timer3 to generate interrupts at a RATE Hz rate.
                                         // Note that timer3 is connected to SYSCLK/12
 
     Timer3_sem_frequ = rate/timing;     // Set the semaphore frequency
 
-    SFRPAGE = TMR3_PAGE;                // set SFR page
+    SFRPAGE = TMR3_PAGE;                // set the SFR page to allow access to the necessary SFRs
     TMR3CN  = 0x00;                     // Stop Timer3; Clear TF3;
     TMR3CF  = 0x00;                     // use SYSCLK/12 as timebase
 //  TMR3CF  = 0x08;                     // use SYSCLK as timebase
-    RCAP3   = (uint16_t)( 65536U - counts ); // Init reload values
+    RCAP3   = (uint16_t)(65536UL - counts); // Set the timer reload value to ensure the desired interrupt frequency
     // or   = -counts; -- see the in class comment
     TMR3    = 0xffff;                   // set to reload immediately
     EIE2   |= 0x01;                     // enable Timer3 interrupts
     TMR3CN |= 0x04;                     // start Timer3
 
-    SFRPAGE = SFRPAGE_SAVE;             // Restore SFR page
+    SFRPAGE = SFRPAGE_SAVE;             // Restore the original SFR page
 }
 
 
@@ -71,8 +71,8 @@ void Timer3_ISR (void) __interrupt 14
     // static variable - a global variable hidden in a function
     static uint16_t  sem_cnt = 0;
     
-    SFRPAGE  = TMR3_PAGE;                       // we are on TMR3_PAGE page right now
-    TF3 = 0;                                    // clear TF3 so that the interrupt may happen again
+    SFRPAGE  = TMR3_PAGE;
+    TF3 = 0;                            // clear TF3 so that the interrupt may happen again
 
     if (sem_cnt==0)
     {

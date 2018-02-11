@@ -19,14 +19,14 @@ void UART_puts(const char* buffer)
         putchar(*buffer++);
     }
 #else
-    uint8_t SFRPAGE_SAVE = SFRPAGE;    // Save Current SFR Page
+    uint8_t SFRPAGE_SAVE = SFRPAGE;    // Save the current SFR page
     SFRPAGE = UART_PAGE;
     while (*buffer)
     {
         if ( '\n' == *buffer ) putchar(0x0d);   // add linefeed for ASCII transmission
         putchar(*buffer++);
     }
-    SFRPAGE = SFRPAGE_SAVE;         // Restore SFR page
+    SFRPAGE = SFRPAGE_SAVE;         // Restore the original SFR page
 #endif
 }
 
@@ -35,10 +35,10 @@ void UART_gets(char* buffer, uint16_t len)
 #ifdef SDCC
     gets_safe(buffer,len);          // !! SDCC originally has no max buffer parameter !!
 #else
-    uint8_t SFRPAGE_SAVE = SFRPAGE;    // Save Current SFR Page
+    uint8_t SFRPAGE_SAVE = SFRPAGE;    // Save the current SFR page
     SFRPAGE = UART_PAGE;
     gets(buffer,len);
-    SFRPAGE = SFRPAGE_SAVE;         // Restore SFR page
+    SFRPAGE = SFRPAGE_SAVE;         // Restore the original SFR page
 #endif
 }
 
@@ -46,7 +46,7 @@ void UART_gets_noecho(char* buffer, uint16_t len)
 {
     uint16_t count=0;
 #ifndef SDCC
-    uint8_t SFRPAGE_SAVE = SFRPAGE;    // Save Current SFR Page
+    uint8_t SFRPAGE_SAVE = SFRPAGE;    // Save the current SFR page
     SFRPAGE = UART_PAGE;
 #endif
 
@@ -67,7 +67,7 @@ void UART_gets_noecho(char* buffer, uint16_t len)
 
 
 #ifndef SDCC
-    SFRPAGE = SFRPAGE_SAVE;         // Restore SFR page
+    SFRPAGE = SFRPAGE_SAVE;         // Restore the original SFR page
 #endif
 }
 
@@ -80,14 +80,14 @@ void UART_write(const char* buffer, uint16_t len)
         --len;
     }
 #else
-    uint8_t SFRPAGE_SAVE = SFRPAGE;    // Save Current SFR Page
+    uint8_t SFRPAGE_SAVE = SFRPAGE;    // Save the current SFR page
     SFRPAGE = UART_PAGE;
     while(len>0)
     {
         putchar(*buffer++);
         --len;
     }
-    SFRPAGE = SFRPAGE_SAVE;         // Restore SFR page
+    SFRPAGE = SFRPAGE_SAVE;         // Restore the original SFR page
 #endif
 }
 
@@ -100,14 +100,14 @@ void UART_read (char* buffer, uint16_t len)
         --len;
     }
 #else
-    uint8_t SFRPAGE_SAVE = SFRPAGE;    // Save Current SFR Page
+    uint8_t SFRPAGE_SAVE = SFRPAGE;    // Save the current SFR page
     SFRPAGE = UART_PAGE;
     while(len>0)
     {
         (*buffer++)=getchar();
         --len;
     }
-    SFRPAGE = SFRPAGE_SAVE;         // Restore SFR page
+    SFRPAGE = SFRPAGE_SAVE;         // Restore the original SFR page
 #endif
 }
 

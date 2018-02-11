@@ -13,7 +13,7 @@ char * gets_safe(char *s, short n);
 //
 void UART_Init (unsigned long sysclk, unsigned long baudrate)
 {
-    char SFRPAGE_SAVE = SFRPAGE;    // Save Current SFR page
+    char SFRPAGE_SAVE = SFRPAGE;    // Save the current SFR page
     const unsigned long int sysclkoverbaud = sysclk/baudrate;
 
     SFRPAGE = UART_PAGE;
@@ -58,13 +58,13 @@ void UART_Init (unsigned long sysclk, unsigned long baudrate)
     SFRPAGE = UART_PAGE;
     TI1 = 1;                        // Indicate TX1 ready
 
-    SFRPAGE = SFRPAGE_SAVE;         // Restore SFR page
+    SFRPAGE = SFRPAGE_SAVE;         // Restore the original SFR page
 }
 
 
 void UART_Quit (void)
 {
-    char SFRPAGE_SAVE = SFRPAGE;    // Save Current SFR page
+    char SFRPAGE_SAVE = SFRPAGE;    // Save the current SFR page
     
     // Disable Timer1
     SFRPAGE = TIMER01_PAGE;
@@ -76,24 +76,24 @@ void UART_Quit (void)
     SFRPAGE = UART_PAGE;
     SCON1 = 0x00;                   // Disable UART1
     
-    SFRPAGE = SFRPAGE_SAVE;         // Restore SFR page
+    SFRPAGE = SFRPAGE_SAVE;         // Restore the original SFR page
 }
 
 unsigned char ready_getchar (void) {
-    char SFRPAGE_SAVE = SFRPAGE;    // Save Current SFR page
+    char SFRPAGE_SAVE = SFRPAGE;    // Save the current SFR page
     unsigned char c;
     SFRPAGE = UART_PAGE;
     c = RI1;
-    SFRPAGE = SFRPAGE_SAVE;         // Restore SFR page
+    SFRPAGE = SFRPAGE_SAVE;         // Restore the original SFR page
     return (c);
 }
 
 unsigned char ready_putchar (void) {
-    char SFRPAGE_SAVE = SFRPAGE;    // Save Current SFR page
+    char SFRPAGE_SAVE = SFRPAGE;    // Save the current SFR page
     unsigned char c;
     SFRPAGE = UART_PAGE;
     c = TI1;
-    SFRPAGE = SFRPAGE_SAVE;         // Restore SFR page
+    SFRPAGE = SFRPAGE_SAVE;         // Restore the original SFR page
     return (c);
 }
 
@@ -101,23 +101,23 @@ unsigned char ready_putchar (void) {
 #ifdef SDCC
 
 char getchar ()  {
-    char SFRPAGE_SAVE = SFRPAGE;    // Save Current SFR page
+    char SFRPAGE_SAVE = SFRPAGE;    // Save the current SFR page
     char c;
     SFRPAGE = UART_PAGE;
     while (!RI1);
     c = SBUF1;
     RI1 = 0;
-    SFRPAGE = SFRPAGE_SAVE;         // Restore SFR page
+    SFRPAGE = SFRPAGE_SAVE;         // Restore the original SFR page
     return (c);
 }
 
 void putchar (char c)  {
-    char SFRPAGE_SAVE = SFRPAGE;    // Save Current SFR page
+    char SFRPAGE_SAVE = SFRPAGE;    // Save the current SFR page
     SFRPAGE = UART_PAGE;
     while (!TI1);
     TI1 = 0;
     SBUF1 = c;
-    SFRPAGE = SFRPAGE_SAVE;         // Restore SFR page
+    SFRPAGE = SFRPAGE_SAVE;         // Restore the original SFR page
 }
 
 #endif

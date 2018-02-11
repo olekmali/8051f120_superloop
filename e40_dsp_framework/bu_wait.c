@@ -9,14 +9,14 @@
 //
 void wait_ms(uint32_t clock, uint16_t ms)
 {
-    uint8_t SFRPAGE_SAVE = SFRPAGE; // Save Current SFR page
+    uint8_t SFRPAGE_SAVE = SFRPAGE; // Save the current SFR page
 
     SFRPAGE = TMR2_PAGE;
     TMR2CN = 0x00;                  // Stop Timer2; Clear TF2; 
                                     // Set internal count source
     TMR2CF = 0x00;                  // use SYSCLK/12 as timebase
 
-    RCAP2 = (uint16_t)( 65536U - (clock/(1000U*12U)) );
+    RCAP2 = (uint16_t)( 65536UL - (clock/(1000U*12U)) );
                                     // Timer 2 set to overflow at 1 kHz
                                     // NOTE: 0 << (clock/(1000*12)) <= 65535
                                     //         or increase timebase speed

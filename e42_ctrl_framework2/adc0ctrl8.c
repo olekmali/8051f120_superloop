@@ -8,8 +8,8 @@
 //-----------------------------------------------------------------------------
 
 
-static __xdata uint16_t input[9]; // sampled 9 input channels values
-static __xdata uint8_t timing=0;  // a crude semaphore 
+static __xdata uint16_t input[9];       // sampled 9 input channels values
+static __xdata uint8_t timing=0;        // a crude semaphore 
 
 //------------------------------------------------------------------------------------
 // getRecentResult
@@ -33,15 +33,15 @@ uint16_t getRecentInput(uint8_t channel)
 
 void  setNextOutput (uint8_t channel, uint16_t value)
 {
-    uint8_t SFRPAGE_SAVE = SFRPAGE;        // Save Current SFR page
+    uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save the current SFR page
     if (channel&0x01) {
-        SFRPAGE = DAC1_PAGE;            // set SFR page to ADC1
+        SFRPAGE = DAC1_PAGE;            // set the SFR page to allow access to the necessary SFRs to ADC1
         DAC1 = value;                   // this value will be out on the next Timer3 roll over and interrupt
     } else {
-        SFRPAGE = DAC0_PAGE;            // set SFR page to ADC0
+        SFRPAGE = DAC0_PAGE;            // set the SFR page to allow access to the necessary SFRs to ADC0
         DAC0 = value;                   // this value will be out on the next Timer3 roll over and interrupt
     }
-    SFRPAGE = SFRPAGE_SAVE;             // Restore SFR page
+    SFRPAGE = SFRPAGE_SAVE;             // Restore the original SFR page
 }
 
 uint8_t is_data_ready()
@@ -76,15 +76,15 @@ void reset_data_ready()
 //
 void ADC0_DACs_Timer3_Init (uint32_t sysclock, uint32_t rate)
 {
-    uint8_t SFRPAGE_SAVE = SFRPAGE;        // Save Current SFR page
-    int16_t counts = sysclock/12/rate;      // Init Timer3 to generate interrupts at a RATE Hz rate.
+    uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save the current SFR page
+    int16_t counts = sysclock/12/rate;  // Init Timer3 to generate interrupts at a RATE Hz rate.
                                         // Note that timer3 is connected to SYSCLK/12
 
-    SFRPAGE = TMR3_PAGE;                // set SFR page
+    SFRPAGE = TMR3_PAGE;                // set the SFR page to allow access to the necessary SFRs
     TMR3CN  = 0x00;                     // Stop Timer3; Clear TF3;
     TMR3CF  = 0x00;                     // use SYSCLK/12 as timebase
 //  TMR3CF  = 0x08;                     // use SYSCLK as timebase
-    RCAP3   = 65536 -(uint16_t)counts;  // Init reload values
+    RCAP3   = (uint16_t)(65536UL - counts);  // Set the timer reload value to ensure desired interrupt frequency
     // or   = -(uint16_t)counts; -- see the in class comment
     TMR3    = RCAP3;                    // set to reload immediately
     EIE2   |= 0x01;                     // ENABLE Timer3 interrupts
@@ -119,10 +119,10 @@ void ADC0_DACs_Timer3_Init (uint32_t sysclock, uint32_t rate)
     // Remember to enable global interrupts when ready
 
 
-    SFRPAGE = DAC0_PAGE;                // set SFR page
+    SFRPAGE = DAC0_PAGE;                // set the SFR page to allow access to the necessary SFRs
 //  REF0CN |= 0x07;                     // enable: 0x01 on-chip VREF, 0x02 VREF output buffer for ADC and DAC, and 0x04 temp sensor
     DAC0CN  = 0x8F;                     // enable DAC0 left justified, and set up to out on Timer3 overflow,
-    SFRPAGE = DAC1_PAGE;                // set SFR page
+    SFRPAGE = DAC1_PAGE;                // set the SFR page to allow access to the necessary SFRs
     DAC1CN  = 0x8F;                     // enable DAC1 left justified, and set up to out on Timer3 overflow,
                                         // 1------- enable                     <-- this one is used
                                         // -----000 right justify 12bit input
@@ -133,7 +133,7 @@ void ADC0_DACs_Timer3_Init (uint32_t sysclock, uint32_t rate)
                                         // ---11--- execute on Timer2 overflow
 
 
-    SFRPAGE = SFRPAGE_SAVE;             // Restore SFR page
+    SFRPAGE = SFRPAGE_SAVE;             // Restore the original SFR page
 }
 
 //------------------------------------------------------------------------------------
@@ -152,7 +152,7 @@ void ADC0_DACs_Timer3_Init (uint32_t sysclock, uint32_t rate)
 //
 void Timer3_ISR (void) __interrupt 14
 {
-    SFRPAGE = TMR3_PAGE;                // set SFR page
+    SFRPAGE = TMR3_PAGE;                // set the SFR page to allow access to the necessary SFRs
     TF3 = 0;                            // clear TF3
 
     SFRPAGE = ADC0_PAGE;

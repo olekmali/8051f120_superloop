@@ -1,6 +1,4 @@
 // Copyright (C) 2008 Mike Firman
-// Copyright (C) 2008-2017 Aleksander Malinowski
-
 #include "C8051F120.h"                  // Device-specific SFR Definitions
 #include "C8051F120_io.h"
 #include "adc0wait.h"

@@ -120,4 +120,4 @@ void putTouch(uint8_t value)
 
 
 uint8_t ifFirstTime(void)      { return(getTouch()==0xFF); }
-void          setNotFirstTime(void)  { putTouch(0); }
+void    setNotFirstTime(void)  { putTouch(0); }

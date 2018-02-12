@@ -1,5 +1,3 @@
-// Copyright (C) 2015-2017 Aleksander Malinowski
-
 #include "c8051F120.h"                  // Device-specific SFR Definitions
 #include "c8051F120_io.h"               // Device-specific SFR Definitions
 

@@ -1,5 +1,3 @@
-// Copyright (C) 2010-2017 Aleksander Malinowski
-
 #include "C8051F120.h"                  // Device-specific SFR Definitions
 
 #include "bu_init.h"
@@ -14,7 +12,7 @@
 
 typedef struct configt {
     uint32_t   count;
-    char                name[31];
+    char       name[31];
 };
 
 
@@ -64,5 +62,6 @@ void main(void)
     FLASH_put(0, (void*) &remember, sizeof(remember) );
     UART_puts("Press RESET to try again!\n");
 
-    while(1) ;
+    while(1)
+        ;
 }

@@ -1,5 +1,3 @@
-// Copyright (C) 2010-2017 Aleksander Malinowski
-
 #include "adc0int8rap.h"
 #include "C8051F120.h"                  // Device-specific SFR Definitions
 #include "C8051F120_io.h"               // SFR declarations

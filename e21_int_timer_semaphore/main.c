@@ -1,5 +1,3 @@
-// Copyright (C) 2015-2017 Aleksander Malinowski
-
 #include "bu_init.h"
 #include "timer3int.h"
 #include "c8051F120.h"                  // Device-specific SFR Definitions

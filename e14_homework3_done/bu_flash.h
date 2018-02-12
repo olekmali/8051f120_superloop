@@ -11,9 +11,9 @@ void FLASH_put(uint8_t pos, const void * buffer, uint8_t len);
 void FLASH_get(uint8_t pos,       void * buffer, uint8_t len);
 
 uint8_t getTouch(void);
-void          putTouch(uint8_t value);
+void    putTouch(uint8_t value);
 
 uint8_t ifFirstTime(void);
-void          setNotFirstTime(void);
+void    setNotFirstTime(void);
 
 #endif

@@ -34,7 +34,7 @@ void wait_ms(uint32_t clock, uint16_t ms)
         ms--;                       // decrease ms to go
     }
 
-    TR2 = 0;                        // Stop Timer 2
+    TMR2CN = 0x00;                  // Stop Timer2; Clear TF2; 
 
     SFRPAGE = SFRPAGE_SAVE;         // Restore SFRPAGE
 }

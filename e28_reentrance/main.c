@@ -1,4 +1,4 @@
-#include "C8051F120.h"                  // Device-specific SFR Definitions
+#include "C8051F120.h"
 #include "C8051F120_io.h"
 
 #include "bu_init.h"
@@ -11,8 +11,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define BAUDRATE     9600U              // Baud rate of UART in bps
-#define SAMPLE_RATE 50000L              // Interrupt frequency in Hz - high to accommodate high range of PWM frequencies
+#define BAUDRATE         9600U          // Baud rate of UART in bps
+#define INTERRUPT_RATE  50000UL         // Interrupt frequency in Hz - high to accommodate high range of PWM frequencies
 
 void main(void)
 {
@@ -29,7 +29,7 @@ void main(void)
     UART_Init(SYSCLK, BAUDRATE);
 
     // using Timer4 as update scheduler initialize T4 to update DAC1 after (SYSCLK cycles)/sample have passed.
-    Timer4_Init (SYSCLK, SAMPLE_RATE);
+    Timer4_Init (SYSCLK, INTERRUPT_RATE);
     EA = 1;
 
     a = 654321;

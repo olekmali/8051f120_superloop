@@ -1,5 +1,5 @@
-#include "C8051F120.h"                  // Device-specific SFR Definitions
-#include "C8051F120_io.h"               // SFR declarations
+#include "C8051F120.h"
+#include "C8051F120_io.h"
 
 #include "bu_init.h"
 #include "timer3int.h"
@@ -8,8 +8,8 @@
 
 #include <stdint.h>
 
-#define SAMPLE_RATE 50000L              // Interrupt frequency in Hz
-#define ACTION_RATE 25000
+#define INTERRUPT_RATE  50000UL         // Interrupt frequency in Hz
+#define ACTION_RATE     25000U
 
 
 #ifndef use_function_to_change_parameter
@@ -31,8 +31,8 @@ void main(void)
     PORT_Init ();
     SYSCLK_Init();
 
-    Timer3_Init(SYSCLK, SAMPLE_RATE, ACTION_RATE);
-                                        // Init Timer3 to generate interrupts at a SAMPLE_RATE rate
+    Timer3_Init(SYSCLK, INTERRUPT_RATE, ACTION_RATE);
+                                        // Init Timer3 to generate interrupts at a INTERRUPT_RATE rate
     EA = 1;                             // enable global interrupts
 
     state = SW2;

@@ -1,5 +1,5 @@
-#include "c8051F120.h"                  // Device-specific SFR Definitions
-#include "c8051F120_io.h"               // Device-specific SFR Definitions
+#include "c8051F120.h"
+#include "c8051F120_io.h"
 
 #include "bu_init.h"
 #include "bu_watchdog.h"
@@ -7,8 +7,8 @@
 
 #include <stdint.h>
 
-#define SAMPLE_RATE     50000           // Interrupt frequency in Hz
-#define LOOP_RATE         100           // Loop semaphore frequency in Hz
+#define INTERRUPT_RATE  50000UL     // Interrupt frequency in Hz
+#define LOOP_RATE         100U      // Loop semaphore frequency in Hz
 
 void main(void)
 {
@@ -22,17 +22,17 @@ void main(void)
     PORT_Init ();
     SYSCLK_Init();
 
-    Timer3_Init(SYSCLK, SAMPLE_RATE, LOOP_RATE);
+    Timer3_Init(SYSCLK, INTERRUPT_RATE, LOOP_RATE);
     Timer3_setMode(2);
 
-    EA = 1;                     // enable global interrupts
+    EA = 1;                         // enable global interrupts
 
     while (1)
     {
         // wait for Timer3 interrupt, at the rate of LOOP_RATE
         // it will release the semaphore so that the loop does one iteration
         while( !Timer3_GetSemaphore() ) {
-            WatchDog_reset();   // not every interupt releases the semaphore
+            WatchDog_reset();   // not every interrupt releases the semaphore
                                 // reset the watchdog timer while still waiting
             
             // sleep until the next interrupt happens and then check [again]

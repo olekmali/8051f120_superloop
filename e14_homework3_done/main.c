@@ -1,4 +1,4 @@
-#include "C8051F120.h"                  // Device-specific SFR Definitions
+#include "C8051F120.h"
 
 #include "bu_init.h"
 #include "bu_uart.h"
@@ -8,7 +8,7 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#define BAUDRATE     9600U              // Baud rate of UART in bps
+#define BAUDRATE         9600U          // Baud rate of UART in bps
 
 typedef struct configt {
     uint32_t   count;

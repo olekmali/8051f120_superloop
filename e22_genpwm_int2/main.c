@@ -1,4 +1,4 @@
-#include "C8051F120.h"                  // Device-specific SFR Definitions
+#include "C8051F120.h"
 #include "C8051F120_io.h"
 
 #include "bu_init.h"
@@ -12,9 +12,9 @@
 
 #define BAUDRATE         9600U          // Baud rate of UART in bps
 #define BUFLEN             20           // Maximum user buffer size
-#define SAMPLE_RATE     50000L          // Interrupt frequency in Hz - high to accommodate high range of PWM frequencies
-#define PWM_FREQUENCY    1000           // Interrupt frequency in Hz - high to accommodate high range of PWM frequencies
-#define PWM_RESOLUTION    100 
+#define INTERRUPT_RATE  50000UL         // Interrupt frequency in Hz - high to accommodate high range of PWM frequencies
+#define PWM_FREQUENCY    1000U          // Interrupt frequency in Hz - high to accommodate high range of PWM frequencies
+#define PWM_RESOLUTION    100U
 
 void main(void)
 {
@@ -31,7 +31,7 @@ void main(void)
     UART_Init(SYSCLK, BAUDRATE);
 
     // using Timer4 as update scheduler initialize T4 to update DAC1 after (SYSCLK cycles)/sample have passed.
-    Timer4_PWM_Init (SYSCLK, SAMPLE_RATE);
+    Timer4_PWM_Init (SYSCLK, INTERRUPT_RATE);
     EA = 1;
 
     while (1) {

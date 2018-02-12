@@ -1,4 +1,4 @@
-#include "C8051F120.h"                  // Device-specific SFR Definitions
+#include "C8051F120.h"
 #include "C8051F120_io.h"
 
 #include "bu_init.h"
@@ -10,8 +10,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define BAUDRATE     9600U              // Baud rate of UART in bps
-#define BUFLEN         20
+#define BAUDRATE         9600U          // Baud rate of UART in bps
+#define BUFLEN             20
 
 void main(void)
 {

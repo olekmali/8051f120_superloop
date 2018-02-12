@@ -1,7 +1,7 @@
 //* ECE471/571 Homework 2 File - provided test program for hw_sysclk.c
 
-#include "C8051F120.h"      // Device-specific SFR Definitions
-#include "C8051F120_io.h"   // Device-specific SFR Definitions
+#include "C8051F120.h"
+#include "C8051F120_io.h"
 
 #include "hw_sysclk.h"
 

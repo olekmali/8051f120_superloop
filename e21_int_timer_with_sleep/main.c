@@ -1,4 +1,4 @@
-#include "c8051F120.h"                  // Device-specific SFR Definitions
+#include "C8051F120.h"
 #include "c8051F120_io.h"               // Device-specific SFR Definitions
 
 #include "bu_init.h"
@@ -7,8 +7,8 @@
 
 #include <stdint.h>
 
-#define SAMPLE_RATE     50000           // Interrupt frequency in Hz
-#define LOOP_RATE         100           // Loop semaphore frequency in Hz
+#define INTERRUPT_RATE  50000UL         // Interrupt frequency in Hz
+#define LOOP_RATE         100U          // Loop semaphore frequency in Hz
 
 #define TOGGLE_CNT (LOOP_RATE/2)        // LED flashing to indicate "stay alive"
 
@@ -22,12 +22,12 @@ void main(void)
     PORT_Init ();
     SYSCLK_Init();
 
-    Timer3_Init(SYSCLK, SAMPLE_RATE, LOOP_RATE);
+    Timer3_Init(SYSCLK, INTERRUPT_RATE, LOOP_RATE);
  
     // Reduce the main loop rate below 100Hz to see that frequent resets start occuring
     // check it in debugger by using run-to-cursor -- you should reach here only once
 
-    EA = 1;                     // enable global interrupts
+    EA = 1;                             // enable global interrupts
 
     cnt = TOGGLE_CNT;
     while (1)

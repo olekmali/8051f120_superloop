@@ -1,5 +1,5 @@
-#include "C8051F120.h"                  // Device-specific SFR Definitions
-#include "C8051F120_io.h"               // SFR declarations
+#include "C8051F120.h"
+#include "C8051F120_io.h"
 #include "adc0ctrl8.h"
 #include "pwmint.h"
 
@@ -10,14 +10,14 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#define CTRL_SAMPLE_RATE       100L     // Control input Sample frequency in Hz
-#define PWM_SAMPLE_RATE     200000L     // PWM interrupt rate
-#define PWM_FRQ_RATE         10000L     // PWM frequency in Hz
+#define CTRL_SAMPLE_RATE       100U     // Control input Sample frequency in Hz
+#define PWM_SAMPLE_RATE     200000UL    // PWM interrupt rate
+#define PWM_FRQ_RATE         10000U     // PWM frequency in Hz
 
 // extras
 #define BAUDRATE     9600U              // Baud rate of UART in bps
 //#define BAUDRATE  38400U              // Baud rate of UART in bps
-#define TEMP_CHANNEL  (8)               // which AD channel measures temperature
+#define TEMP_CHANNEL    8               // which AD channel measures temperature
 
 void main(void)
 {

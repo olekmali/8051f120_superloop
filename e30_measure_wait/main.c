@@ -1,4 +1,4 @@
-#include "C8051F120.h"                  // Device-specific SFR Definitions
+#include "C8051F120.h"
 #include "C8051F120_io.h"
 
 #include "bu_init.h"
@@ -10,8 +10,8 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#define BAUDRATE     9600U              // Baud rate of UART in bps
-#define TEMP_CHANNEL  (8)
+#define BAUDRATE         9600U          // Baud rate of UART in bps
+#define TEMP_CHANNEL        8
 
 void main(void)
 {

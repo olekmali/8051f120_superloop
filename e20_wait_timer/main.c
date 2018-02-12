@@ -1,5 +1,5 @@
-#include "C8051F120.h"                  // Device-specific SFR Definitions
-#include "C8051F120_io.h"               // Device-specific SFR Definitions
+#include "C8051F120.h"
+#include "C8051F120_io.h"
 
 #include "bu_init.h"
 #include "bu_wait.h"
@@ -17,7 +17,7 @@ void main(void)
 
     while (1)
     {
-        wait_ms(SYSCLK, 500);
+        wait_ms(SYSCLK, 500U);
         LED = ! LED;
     }
 }

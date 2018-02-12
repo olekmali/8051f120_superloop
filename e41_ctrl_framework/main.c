@@ -1,5 +1,5 @@
-#include "C8051F120.h"                  // Device-specific SFR Definitions
-#include "C8051F120_io.h"               // SFR declarations
+#include "C8051F120.h"
+#include "C8051F120_io.h"
 #include "adc0ctrl8.h"
 
 #include "bu_init.h"
@@ -10,9 +10,9 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#define BAUDRATE     9600U              // Baud rate of UART in bps
-#define SAMPLE_RATE  1000L              // Sample frequency in Hz
-#define TEMP_CHANNEL  (8)
+#define BAUDRATE         9600U          // Baud rate of UART in bps
+#define INTERRUPT_RATE   1000UL         // Sample frequency in Hz
+#define TEMP_CHANNEL    8
 
 void main(void)
 {
@@ -25,7 +25,7 @@ void main(void)
     SYSCLK_Init();
     UART_Init(SYSCLK, BAUDRATE);
 
-    ADC0_DACs_Timer3_Init(SYSCLK, SAMPLE_RATE);
+    ADC0_DACs_Timer3_Init(SYSCLK, INTERRUPT_RATE);
     // Needs global interrupts enabled to work
 
     EA = 1;                             // Enable global interrupts

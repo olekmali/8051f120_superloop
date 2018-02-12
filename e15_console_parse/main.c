@@ -1,5 +1,5 @@
-#include "C8051F120.h"                  // Device-specific SFR Definitions
-#include "C8051F120_io.h"               // Device-specific SFR Definitions
+#include "C8051F120.h"
+#include "C8051F120_io.h"
 #include "bu_init.h"
 #include "bu_uart.h"
 #include "bu_com.h"
@@ -33,9 +33,9 @@ uint8_t split_by_comma(const char data_string[], int32_t data_extracted[], uint8
     return(columns_cnt);
 }
 
-#define BAUD_RATE           (9600)
-#define MAX_GPS_LINE_LENGTH (80)
-#define MAX_DATA_COLUMNS    (20)
+#define BAUD_RATE               9600U
+#define MAX_GPS_LINE_LENGTH       80
+#define MAX_DATA_COLUMNS          20
 
 void main(void)
 {

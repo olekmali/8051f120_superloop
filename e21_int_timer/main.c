@@ -1,14 +1,14 @@
-#include "C8051F120.h"                  // Device-specific SFR Definitions
-#include "C8051F120_io.h"               // SFR declarations
+#include "C8051F120.h"
+#include "C8051F120_io.h"
 
 #include "bu_init.h"
 #include "timer3int.h"
 
 #include <stdint.h>
 
-#define SAMPLE_RATE 50000L              // Interrupt frequency in Hz
-#define PULSE_FRQ   25000
-#define PULSE_WDT    5000
+#define INTERRUPT_RATE  50000UL         // Interrupt frequency in Hz
+#define PULSE_FRQ       25000U
+#define PULSE_WDT        5000U
 
 // extern uint8_t Timer3_rate1, Timer3_rate2; 
 // cannot access Timer3_rateN from here because of used "static" keyword
@@ -26,7 +26,7 @@ void main(void)
     PORT_Init ();
     SYSCLK_Init();
 
-    Timer3_Init(SYSCLK, SAMPLE_RATE);   // Init Timer3 to generate interrupts at a SAMPLE_RATE rate
+    Timer3_Init(SYSCLK, INTERRUPT_RATE);// Init Timer3 to generate interrupts at a INTERRUPT_RATE rate
     EA = 1;                             // enable global interrupts
 
     mode  = 1;
@@ -42,7 +42,7 @@ void main(void)
             {
                 mode++; if (mode>5) mode=0;     // mode = (mode+1) % 6;
 
-                Timer3_setRates( ((uint32_t)(mode)*PULSE_FRQ/5), PULSE_FRQ );
+                Timer3_setRates( ((uint32_t)(mode)*PULSE_FRQ/5U), PULSE_FRQ );
                                 // Q: why typecasting to int32_t here?
                 
             }

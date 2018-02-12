@@ -1,5 +1,5 @@
 #include "periodpca.h"
-#include "C8051F120.h"                  // SFR declarations
+#include "C8051F120.h"
 
 //------------------------------------------------------------------------------------
 // Hardware IO CONSTANTS

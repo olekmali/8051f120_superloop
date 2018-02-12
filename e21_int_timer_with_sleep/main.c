@@ -24,7 +24,7 @@ void main(void)
 
     Timer3_Init(SYSCLK, INTERRUPT_RATE, LOOP_RATE);
  
-    // Reduce the main loop rate below 100Hz to see that frequent resets start occuring
+    // Reduce the main loop rate below 100Hz to see that frequent resets start occurring
     // check it in debugger by using run-to-cursor -- you should reach here only once
 
     EA = 1;                             // enable global interrupts

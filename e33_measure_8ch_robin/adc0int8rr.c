@@ -1,6 +1,6 @@
 #include "adc0int8rr.h"
 
-#include "C8051F120.h"                  // SFR declarations
+#include "C8051F120.h"
 
 //-----------------------------------------------------------------------------
 // Global VARIABLES

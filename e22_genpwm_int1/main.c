@@ -12,8 +12,8 @@
 
 #define BAUDRATE         9600U          // Baud rate of UART in bps
 #define BUFLEN             20           // Maximum user buffer size
-#define PWM_FREQUENCY    1000           // Interrupt frequency in Hz - high to accommodate high range of PWM frequencies
-#define PWM_RESOLUTION    100 
+#define PWM_FREQUENCY    1000U          // Interrupt frequency in Hz - high to accommodate high range of PWM frequencies
+#define PWM_RESOLUTION    100U 
 
 void main(void)
 {

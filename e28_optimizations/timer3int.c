@@ -1,7 +1,7 @@
 #include "timer3int.h"
 
-#include "C8051F120.h"                  // SFR declarations
-#include "C8051F120_io.h"               // SFR declarations
+#include "C8051F120.h"
+#include "C8051F120_io.h"
 
 //------------------------------------------------------------------------------------
 // Global variable(s) used as bridge to pass parameters to the interrupts

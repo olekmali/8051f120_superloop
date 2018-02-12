@@ -1,6 +1,6 @@
 #include "adc0wait.h"
 
-#include "C8051F120.h"                  // SFR declarations
+#include "C8051F120.h"
 
 //------------------------------------------------------------------------------------
 // ADC0_Wait_Init

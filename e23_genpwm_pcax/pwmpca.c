@@ -1,7 +1,7 @@
 #include "pwmpca.h"
 
-#include "C8051F120.h"                  // SFR declarations
-#include "C8051F120_io.h"               // SFR declarations
+#include "C8051F120.h"
+#include "C8051F120_io.h"
 
 
 //------------------------------------------------------------------------------------

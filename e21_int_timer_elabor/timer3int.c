@@ -1,7 +1,7 @@
 #include "timer3int.h"
 
-#include "c8051f120.h"                  // SFR declarations
-#include "c8051f120_io.h"               // SFR declarations
+#include "c8051f120.h"
+#include "c8051f120_io.h"
 
 
 //------------------------------------------------------------------------------------
@@ -16,10 +16,10 @@ static uint8_t Timer3_mode        = 0;
 static uint8_t Timer3_next_mode   = 0;
 static __code const uint16_t blinkdata[MAX_MODES][MAX_SEQU] =
     {   {10000, 10000, 10000, 30000, 0 },
-        {10000, 40000, 0 , 0, 0},
-        {25000, 90000, 0 , 0, 0},
-        {10000, 10000, 30000, 20000, 0},
-        {0} // this mode is "off mode"
+        {10000, 40000, 0 ,    0,     0 },
+        {25000, 90000, 0 ,    0,     0 },
+        {10000, 10000, 30000, 20000, 0 },
+        {0,     0,     0,     0,     0 } // this mode is "off mode"
     };
 
 //------------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 #include "timer3int.h"
 
-#include "c8051f120.h"                  // SFR declarations
-#include "c8051f120_io.h"               // SFR declarations
+#include "c8051f120.h"
+#include "c8051f120_io.h"
 
 
 //------------------------------------------------------------------------------------

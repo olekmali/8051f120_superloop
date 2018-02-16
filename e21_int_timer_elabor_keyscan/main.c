@@ -29,7 +29,6 @@ void main(void)
 
     Timer3_Init(SYSCLK, INTERRUPT_RATE, LOOP_RATE);
     Timer3_setMode(2);
-
     EA = 1;                         // enable global interrupts
 
     while (1)

@@ -10,18 +10,6 @@
 static uint8_t  Timer3_semaphore   = 0;
 static uint16_t Timer3_sem_frequ   = 0;
 
-#define MAX_SEQU  (5)
-
-static uint8_t Timer3_mode        = 0;
-static uint8_t Timer3_next_mode   = 0;
-static __code const uint16_t blinkdata[MAX_MODES][MAX_SEQU] =
-    {   {200,  200,  200,  600,  0 },
-        {200,  800,    0,    0,  0 },
-        {500, 1800,    0,    0,  0 },
-        {200,  200,  600,  400,  0 },
-        {0,      0,    0,    0,  0 } // this mode is the "off mode"
-    };
-
 //------------------------------------------------------------------------------------
 // Timer3_Init
 //------------------------------------------------------------------------------------
@@ -64,17 +52,6 @@ char Timer3_GetSemaphore()
     return(Timer3_semaphore);           // Atomic operation - no need to disable interrupts
 }
 
-void Timer3_setMode(uint8_t mode)
-{
-    __bit EA_SAVE       = EA;           // Preserve Current Interrupt Status
-    EA = 0;                             // disable interrupts
-
-    Timer3_next_mode = mode;
-    // ...
-
-    EA = EA_SAVE;                       // restore interrupts
-}
-
 
 //------------------------------------------------------------------------------------
 // Interrupt Service Routines
@@ -94,9 +71,6 @@ void Timer3_ISR (void) __interrupt 14
     // static variable - a global variable hidden in a function
     static uint16_t  sem_cnt = 0;
     
-    static uint16_t  counter = 0;
-    static uint8_t   phase   = 0;
-
     SFRPAGE  = TMR3_PAGE;                       // we are on TMR3_PAGE page right now
     TF3 = 0;                                    // clear TF3 so that the interrupt may happen again
 
@@ -106,34 +80,5 @@ void Timer3_ISR (void) __interrupt 14
         Timer3_semaphore  = 1;
     } else {
         --sem_cnt;
-    }
-    
-    SFRPAGE  = CONFIG_PAGE;                     // set the SFR page so that ports P4+ can be controlled
-    if (0==counter)
-    {
-
-        // advance to the next timing for the given sequence
-        phase++;
-
-        // However, if we reached the sequence end (timing==0) roll over to the beginning of the sequence
-        if (0==blinkdata[Timer3_mode][phase]) {
-            phase=0;
-            // Change the mode only when the previous sequence ended and the new one is about to start
-            Timer3_mode = Timer3_next_mode;
-        }
-
-        counter=blinkdata[Timer3_mode][phase]; // set up the amount of time until the next event
-
-        // *** service the event ***
-        // check if the phase number is even or odd
-        // except no LED if we count for 0 seconds ("off mode")
-        if (phase & 0x01 || 0==counter)
-            LED = 0;
-        else
-            LED = 1;
-    }
-    else
-    {
-        counter--;
     }
 }

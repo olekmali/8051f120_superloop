@@ -2215,7 +2215,7 @@ BitsBeforeTargetIR=0
 [WorkState_v1_1.BankingPN]
 BankingPN=32767
 [WorkState_v1_1.OutputFile]
-OutputFile=INT_TIMER_ELABOR.omf
+OutputFile=INT_TIMER_ELABOR_PULSE.omf
 [WorkState_v1_1.MakeFile]
 MakeFile=
 [WorkState_v1_1.HexGenerator]

@@ -1,4 +1,4 @@
-#include "C8051F120.h"
+#include <C8051F120.h>
 #include "C8051F120_io.h"
 
 #include "bu_init.h"
@@ -12,14 +12,6 @@
 #define ACTION_RATE     25000U
 
 
-#ifndef use_function_to_change_parameter
-    #ifndef force_volatile_parameter_variable
-        extern uint8_t Timer3_parameter;
-    #else
-        extern volatile uint8_t Timer3_parameter;
-    #endif
-#endif
-    
 void main(void)
 {
     uint8_t state;

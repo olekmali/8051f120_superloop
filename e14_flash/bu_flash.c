@@ -1,6 +1,6 @@
 #include "bu_flash.h"
 
-#include "C8051F120.h"                  // Device-specific SFR Definitions
+#include <C8051F120.h>                  // Device-specific SFR Definitions
 
 static __code __at 0x0000 uint8_t flash_scratchpad[256];
 // ^^^ located in Scratchpad1 area of the 1st 128 bytes, located in Scratchpad2 area of the 2nd 128 bytes

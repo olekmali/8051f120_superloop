@@ -1,6 +1,6 @@
 #include "bu_reset.h"
 
-#include "C8051F120.h"                  // Device-specific SFR Definitions
+#include <C8051F120.h>                  // Device-specific SFR Definitions
 
 uint8_t getResetSource()
 {

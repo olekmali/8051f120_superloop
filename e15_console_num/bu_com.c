@@ -3,7 +3,7 @@
 #include <stdio.h>                  // Add support for printf, putchar, getchar, etc.
 
 #ifndef SDCC
-#include "C8051F120.h"              // Device-specific SFR Definitions
+#include <C8051F120.h>              // Device-specific SFR Definitions
 #endif
 
 #ifdef SDCC
@@ -20,7 +20,7 @@ void UART_puts(const char* buffer)
     }
 #else
     uint8_t SFRPAGE_SAVE = SFRPAGE;    // Save the current SFR page
-    SFRPAGE = UART_PAGE;
+    SFRPAGE = UART1_PAGE;
     while (*buffer)
     {
         if ( '\n' == *buffer ) putchar(0x0d);   // add linefeed for ASCII transmission
@@ -36,7 +36,7 @@ void UART_gets(char* buffer, uint16_t len)
     gets_safe(buffer,len);          // !! SDCC originally has no max buffer parameter !!
 #else
     uint8_t SFRPAGE_SAVE = SFRPAGE;    // Save the current SFR page
-    SFRPAGE = UART_PAGE;
+    SFRPAGE = UART1_PAGE;
     gets(buffer,len);
     SFRPAGE = SFRPAGE_SAVE;         // Restore the original SFR page
 #endif
@@ -47,7 +47,7 @@ void UART_gets_noecho(char* buffer, uint16_t len)
     uint16_t count=0;
 #ifndef SDCC
     uint8_t SFRPAGE_SAVE = SFRPAGE;    // Save the current SFR page
-    SFRPAGE = UART_PAGE;
+    SFRPAGE = UART1_PAGE;
 #endif
 
     len--;
@@ -81,7 +81,7 @@ void UART_write(const char* buffer, uint16_t len)
     }
 #else
     uint8_t SFRPAGE_SAVE = SFRPAGE;    // Save the current SFR page
-    SFRPAGE = UART_PAGE;
+    SFRPAGE = UART1_PAGE;
     while(len>0)
     {
         putchar(*buffer++);
@@ -101,7 +101,7 @@ void UART_read (char* buffer, uint16_t len)
     }
 #else
     uint8_t SFRPAGE_SAVE = SFRPAGE;    // Save the current SFR page
-    SFRPAGE = UART_PAGE;
+    SFRPAGE = UART1_PAGE;
     while(len>0)
     {
         (*buffer++)=getchar();

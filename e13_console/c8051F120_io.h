@@ -3,9 +3,9 @@
 ;
 ;
 ;
-; FILE NAME: C8051F120.H
+; FILE NAME: c8051F120_io.h
 ; TARGET MCUs: C8051F120, F121, F122, F123, F124, F125, F126, F127
-; DESCRIPTION: Switch and LED definitions
+; DESCRIPTION: Switch and LED definitions for SiLabs 8051F120 Dev Kit board and AB4 extension board
 ;
 ; REVISION 1.2
 ;

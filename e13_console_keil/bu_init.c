@@ -1,6 +1,6 @@
 #include "bu_init.h"
 
-#include "C8051F120.h"                         // Device-specific SFR Definitions
+#include <C8051F120.h>                         // Device-specific SFR Definitions
 
 //-----------------------------------------------------------------------------
 // Initialization Routines

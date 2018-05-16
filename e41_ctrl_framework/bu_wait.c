@@ -1,5 +1,5 @@
 #include "bu_wait.h"
-#include "C8051F120.h"              // Device-specific SFR Definitions
+#include <C8051F120.h>              // Device-specific SFR Definitions
 
 //-----------------------------------------------------------------------------
 // wait_ms

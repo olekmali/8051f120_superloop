@@ -1,7 +1,7 @@
 #ifndef _BU_WATCHDOG
 #define _BU_WATCHDOG
 
-#include "C8051F120.h"
+#include <C8051F120.h>
 
 inline void WatchDog_disable_all() {
     WDTCN = 0xde;

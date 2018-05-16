@@ -2225,7 +2225,7 @@ GenHex=0
 [WorkState_v1_1.CExt]
 CExt=.rel
 [WorkState_v1_1.IDEVer]
-IDEVer=4.80.00
+IDEVer=5.30.00
 [WorkState_v1_1.ECProtocol]
 ECProtocol=0
 [WorkState_v1_1.C2StrobeTime]
@@ -2294,7 +2294,4 @@ ptn_Child1=FileName
 FileName=c8051F120_io.h
 ptn_Child1=FileName
 [WorkState_v1_1.Header Files.FileName.FileName.FileName.FileName]
-FileName=c8051F120.h
-ptn_Child1=FileName
-[WorkState_v1_1.Header Files.FileName.FileName.FileName.FileName.FileName]
 FileName=bu_watchdog.h

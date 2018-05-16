@@ -1,6 +1,6 @@
 #include "bu_init.h"
 #include "timer3int.h"
-#include "c8051F120.h"
+#include <C8051F120.h>
 #include "c8051F120_io.h"
 
 #define INTERRUPT_RATE  50000UL     // Interrupt frequency in Hz

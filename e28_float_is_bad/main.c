@@ -1,4 +1,4 @@
-#include "C8051F120.h"                         // Device-specific SFR Definitions
+#include <C8051F120.h>                         // Device-specific SFR Definitions
 #include "C8051F120_io.h"                      // Device-specific SFR Definitions
 
 #include "bu_init.h"

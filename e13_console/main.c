@@ -12,8 +12,8 @@
 
 void main(void)
 {
-    uint8_t state;
-    uint16_t  counter = 0;
+    uint8_t  state;
+    uint16_t counter = 0;
     static __xdata char buffer[4];
     static __xdata char buf_test[20];
 
@@ -50,7 +50,8 @@ void main(void)
                 if (LED==1) UART_puts("LED is now on\n");
                 else UART_puts("LED is now off\n");
 
-                counter++;
+                if (counter<0xFFFFU)
+                    counter++;
                 UART_puts("The switch was pressed ");
                 sprintf(buffer, "%d", counter);
                 UART_puts(buffer);

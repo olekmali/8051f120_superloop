@@ -10,7 +10,7 @@
 
 #define BAUDRATE         9600U          // Baud rate of UART in bps
 
-typedef struct configt {
+typedef struct config_t {
     uint32_t   count;
     char       name[31];
 };
@@ -18,7 +18,7 @@ typedef struct configt {
 
 void main(void)
 {
-    struct configt remember; 
+    struct config_t remember; 
     char buffer[10];
 
 
@@ -42,7 +42,8 @@ void main(void)
     else
     { // For the returning customers, greet them and ask whether desire to change
         FLASH_get(0, (void*) &remember, sizeof(remember) );
-        remember.count++;
+        if (remember.count<0xFFFFFFFF)
+            remember.count++;
         UART_puts("\n\nWelcome for the ");
         sprintf(buffer,"%lu", remember.count);
         UART_puts(buffer);

@@ -31,9 +31,9 @@ void UART_Init (uint32_t sysclk, uint32_t baudrate)
 
     // If reload value is less than 8-bits, select sysclk
     // as Timer 1 baud rate generator
-    if (sysclkoverbaud>>9 < 1)
+    if (sysclkoverbaud<512U)
     {
-        TH1 = -(sysclkoverbaud>>1);
+        TH1 = 256U-(sysclkoverbaud/2U);
         CKCON |= 0x10;              // T1M = 1; SCA1:0 = xx
 
         // Otherwise, select sysclk/48 prescaler.
@@ -42,10 +42,10 @@ void UART_Init (uint32_t sysclk, uint32_t baudrate)
     {
         // Adjust for truncation in special case
         // Note: Additional cases may be required if the system clock is changed.
-        if ((baudrate == 115200) && (sysclk == 98000000)) {
-            TH1 = -((sysclkoverbaud/2/48)+1);
+        if ((baudrate == 115200U) && (sysclk == 98000000U)) {
+            TH1 = 256U - ((sysclkoverbaud/(2U*48U))+1U);
         } else {
-            TH1 = -(sysclkoverbaud/2/48);
+            TH1 = 256U - (sysclkoverbaud/(2U*48U));
         }
 
         CKCON &= ~0x13;             // Clear all T1 related bits

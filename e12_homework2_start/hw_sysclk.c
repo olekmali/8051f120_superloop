@@ -109,8 +109,8 @@ void reinit_sysclk(uint8_t mode)
                 // set PLL0DIV, PLL0MUL, PLL0FLT
                 break;
             }
-            // wait at least 5us (iddling loop)
-            // wait unitl PLL is locked
+            // wait at least 5us (idling loop)
+            // wait until PLL is locked
             // switch sysclk to PLL - set in CLKSEL
         }
         // disable internal oscillator

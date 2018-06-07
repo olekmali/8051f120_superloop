@@ -7,8 +7,8 @@
 //------------------------------------------------------------------------------------
 // Global variable(s) used as bridge to pass parameters to the interrupts
 //------------------------------------------------------------------------------------
-static uint8_t Timer3_semaphore   = 0;
-static uint16_t  Timer3_sem_frequ   = 0;
+static uint8_t  Timer3_semaphore   = 0;
+static uint16_t Timer3_sem_frequ   = 0;
 
 //------------------------------------------------------------------------------------
 // Timer3_Init

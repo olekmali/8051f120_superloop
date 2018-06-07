@@ -22,7 +22,8 @@ void main(void)
     while (1)
     {
         // wait for Timer3 interrupt, when it ends
-        while( !Timer3_GetSemaphore() ) ;
+        while( !Timer3_GetSemaphore() ) 
+            ;
         // and immediately afterwards reset the interrupt done marker for the next time
         Timer3_ResetSemaphore();
 

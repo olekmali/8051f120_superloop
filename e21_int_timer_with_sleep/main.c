@@ -33,7 +33,8 @@ void main(void)
     while (1)
     {
         // wait for Timer3 interrupt, when it ends
-        while( !Timer3_GetSemaphore() ) {
+        while( !Timer3_GetSemaphore() )
+        {
             // WatchDog_reset();    // optionally reset watchdog timer while waiting
                                     // for the right interrupt to be completed
             

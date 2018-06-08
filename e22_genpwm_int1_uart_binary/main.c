@@ -2,6 +2,7 @@
 #include "C8051F120_io.h"
 
 #include "bu_init.h"
+#include "bu_watchdog.h"
 #include "timer3int.h"
 #include "bu_uart.h"
 
@@ -15,9 +16,8 @@
 
 void main(void)
 {
-    // Disable watchdog timer
-    WDTCN = 0xde;
-    WDTCN = 0xad;
+    // Set up watchdog timer (10.4ms at sysclk of 100MHz)
+    WatchDog_set_10ms();
 
     PORT_Init ();
     SYSCLK_Init();
@@ -31,6 +31,7 @@ void main(void)
         while( ! semaphore_get() )      // waiting for the next 10ms to start
             ;
         semaphore_reset();
+        WatchDog_reset();               // Reset watchdog timer
 
         if ( ready_getchar() )
         {
@@ -38,7 +39,7 @@ void main(void)
             rate = (uint8_t)getchar();
             if (rate>100U) 
                 rate = 100U;
-            Timer3_setRate(rate);
+            Timer3_setPWMDuty(rate);
         }
     }
 }

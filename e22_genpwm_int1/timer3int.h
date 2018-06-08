@@ -7,7 +7,7 @@
 // Note: in real life applications keep ^^^^^^^^   as low as practical
 
 void    Timer3_Init (uint32_t sysclock, uint32_t rate, uint32_t rate_pwm);
-void    Timer3_setRate(uint8_t new_rate);
+void    Timer3_setPWMDuty(uint8_t new_rate);
 
 
 #ifdef SDCC

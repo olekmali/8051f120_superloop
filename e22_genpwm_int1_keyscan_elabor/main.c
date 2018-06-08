@@ -2,6 +2,7 @@
 #include "C8051F120_io.h"
 
 #include "bu_init.h"
+#include "bu_watchdog.h"
 #include "timer3int.h"
 
 #include <stdint.h>
@@ -16,23 +17,23 @@ void main(void)
     uint8_t rate = 10;
     uint16_t duration_ms = 0;
 
-    // Disable watchdog timer
-    WDTCN = 0xde;
-    WDTCN = 0xad;
+    // Set up watchdog timer (10.4ms at sysclk of 100MHz)
+    WatchDog_set_10ms();
 
     PORT_Init ();
     SYSCLK_Init();
 
     Timer3_Init(SYSCLK, INTERRUPT_FRQ, PWM_FRQ, SEMAPHORE_FRQ);
+    Timer3_setPWMDuty(rate);
     EA = 1;                             // enable global interrupts
 
-    Timer3_setRate(rate);
     state = SW2;
     while(1)
     {
         while( ! semaphore_get() )      // waiting for the next 10ms to start
             ;
         semaphore_reset();
+        WatchDog_reset();               // Reset watchdog timer
 
         if (!SW2)
         {
@@ -42,7 +43,7 @@ void main(void)
             if (duration_ms>=500) 
             {   
                 rate = 0;
-                Timer3_setRate(rate);
+                Timer3_setPWMDuty(rate);
             }
         } else {
             // determining if it was a long press or a short press
@@ -54,7 +55,7 @@ void main(void)
                     rate++;
                     if (rate>100)
                         rate=0;
-                    Timer3_setRate(rate);
+                    Timer3_setPWMDuty(rate);
                     duration_ms = 0;
                 } else {
                     // do nothing, button stays released

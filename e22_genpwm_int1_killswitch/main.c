@@ -2,6 +2,7 @@
 #include "C8051F120_io.h"
 
 #include "bu_init.h"
+#include "bu_watchdog.h"
 #include "timer3int.h"
 
 #include <stdint.h>
@@ -16,31 +17,35 @@ void main(void)
     uint8_t state;
     uint8_t rate = 10U;
 
-    // Disable watchdog timer
-    WDTCN = 0xde;
-    WDTCN = 0xad;
+    // Set up watchdog timer (10.4ms at sysclk of 100MHz)
+    WatchDog_set_10ms();
 
     PORT_Init ();
     SYSCLK_Init();
 
     Timer3_Init(SYSCLK, INTERRUPT_FRQ, PWM_FRQ, SEMAPHORE_FRQ, KILLSW_FRQ);
+    Timer3_setPWMDuty(rate);
     EA = 1;                             // enable global interrupts
 
-    Timer3_setRate(rate);
     state = SW2;
     while(1)
     {
         while( ! semaphore_get() )
             ;
         semaphore_reset();
+        WatchDog_reset();               // Reset watchdog timer
 
         // if you don't press a button within 1 second PWM will shut down temporarily
-        if (!SW2)
+        if (state!=SW2)
         {
-            rate = rate + 10U;
-            if (rate>100U)
-                rate=0U;
-            Timer3_setRate(rate);
+            state=SW2;
+            if (!SW2)
+            {
+                rate = rate + 5U;
+                if (rate>100U)
+                    rate=0U;
+                Timer3_setPWMDuty(rate);
+            }
         }
     }
 

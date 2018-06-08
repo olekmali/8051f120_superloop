@@ -38,8 +38,7 @@ void main(void)
         // and immediately afterwards reset the interrupt done marker for the next time
         Timer3_ResetSemaphore();
 
-        // Reset watchdog timer
-        WatchDog_reset();
+        WatchDog_reset();               // Reset watchdog timer
 
         // demo: keep alive indicator
         // experiment: decrease LOOP_RATE to see that

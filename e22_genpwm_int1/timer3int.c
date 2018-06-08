@@ -40,7 +40,7 @@ void Timer3_Init (uint32_t sysclock, uint32_t rate, uint32_t rate_pwm)
 //------------------------------------------------------------------------------------
 // Functions used to access the global variables shared with interrupts
 //------------------------------------------------------------------------------------
-void Timer3_setRate(uint8_t new_rate)
+void Timer3_setPWMDuty(uint8_t new_rate)
 {
     uint8_t EA_SAVE;
     new_rate = (uint8_t)((uint16_t)new_rate * pwm_epoch / 100U );

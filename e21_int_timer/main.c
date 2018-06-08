@@ -2,6 +2,7 @@
 #include "C8051F120_io.h"
 
 #include "bu_init.h"
+#include "bu_watchdog.h"
 #include "timer3int.h"
 
 #include <stdint.h>
@@ -19,19 +20,17 @@ void main(void)
     uint8_t state;
     uint8_t mode;
 
-    // Disable watchdog timer
-    WDTCN = 0xde;
-    WDTCN = 0xad;
+    WatchDog_disable_all();             // Disable watchdog timer
 
     PORT_Init ();
     SYSCLK_Init();
 
     Timer3_Init(SYSCLK, INTERRUPT_RATE);// Init Timer3 to generate interrupts at a INTERRUPT_RATE rate
+    Timer3_setRates(PULSE_WDT, PULSE_FRQ );
+    Timer3_setOffOn(1);
     EA = 1;                             // enable global interrupts
 
     mode  = 1;
-    Timer3_setRates(PULSE_WDT, PULSE_FRQ );
-    Timer3_setOffOn(1);
 
     state = SW2;
     while(1)

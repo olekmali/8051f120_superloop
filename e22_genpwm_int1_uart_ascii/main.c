@@ -2,6 +2,7 @@
 #include "C8051F120_io.h"
 
 #include "bu_init.h"
+#include "bu_watchdog.h"
 #include "timer3int.h"
 #include "bu_uart.h"
 #include "bu_com.h"
@@ -21,8 +22,9 @@
 void main(void)
 {
     // Disable watchdog timer
-    WDTCN = 0xde;
-    WDTCN = 0xad;
+    WatchDog_disable_all();
+    // it is impossible to use watchdog in a loop when human user provides data 
+    // at irregular intervals of time without use of asynchronous input methods
 
     PORT_Init ();
     SYSCLK_Init();
@@ -43,7 +45,7 @@ void main(void)
         UART_puts("Enter PWM duty cycle >");
         UART_gets(buffer, sizeof(buffer));
         value = atoi(&buffer[0]);
-        if (100U>=value) Timer3_setRate( (uint8_t)value );
+        if (100U>=value) Timer3_setPWMDuty( (uint8_t)value );
         else UART_puts("PWM duty out of range\n");
     }
 }

@@ -56,7 +56,7 @@ void Timer4_PWM_Init (uint32_t sysclock, uint32_t rate)
 // Parameter Control Functions
 //------------------------------------------------------------------------------------
 
-void Timer4_PWM_SetFrequency(uint32_t newfrequency)
+void Timer4_PWM_SetFrequency (uint32_t newfrequency)
 {
     __bit EA_SAVE     = EA;             // Preserve the current Interrupt Status
     EA = 0;                             // disable interrupts
@@ -65,7 +65,7 @@ void Timer4_PWM_SetFrequency(uint32_t newfrequency)
     EA = EA_SAVE;                       // restore interrupts
 }
 
-void Timer4_PWM_SetDuty(uint8_t newduty) {
+void Timer4_setPWMDuty(uint8_t newduty) {
     __bit EA_SAVE     = EA;             // Preserve the current Interrupt Status
     EA = 0;                             // disable interrupts
     desired_dutycount = (uint32_t)PHASE_PREC * newduty / 100;

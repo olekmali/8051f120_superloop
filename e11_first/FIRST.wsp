@@ -2427,13 +2427,13 @@ Vendor=5
 [WorkState_v1_1.HITECHPRO]
 HITECHPRO=1
 [WorkState_v1_1.Assembler]
-Assembler=C:\Program Files (x86)\SDCC.360\sdas8051.exe
+Assembler=C:\Program Files\SDCC.380\sdas8051.exe
 [WorkState_v1_1.AssFlag]
 AssFlag=-plosgff
 [WorkState_v1_1.AssFormat]
 AssFormat=<Executable Name> <Flags> <Input File(s)> 
 [WorkState_v1_1.Compiler]
-Compiler=C:\Program Files (x86)\SDCC.360\bin\sdcc.exe
+Compiler=C:\Program Files\SDCC.380\bin\sdcc.exe
 [WorkState_v1_1.CompFlag]
 CompFlag=-c --debug --use-stdout -V
 [WorkState_v1_1.CompFormat]
@@ -2441,7 +2441,7 @@ CompFormat=<Executable Name> <Flags> <Input File(s)>
 [WorkState_v1_1.RunOptimizer]
 RunOptimizer=0
 [WorkState_v1_1.Linker]
-Linker=C:\Program Files (x86)\SDCC.360\bin\sdcc.exe
+Linker=C:\Program Files\SDCC.380\bin\sdcc.exe
 [WorkState_v1_1.LinkFlag]
 LinkFlag=--debug --use-stdout -V --xram-size 8448
 [WorkState_v1_1.LinkFormat]

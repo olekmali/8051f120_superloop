@@ -12,9 +12,6 @@
 
 void main(void)
 {
-    uint8_t state;
-
-
     // Disable watchdog timer
     WDTCN = 0xde;
     WDTCN = 0xad;

@@ -18,9 +18,9 @@ typedef struct config_t {
 
 void main(void)
 {
-    struct config_t remember; 
-    char buffer[10];
-
+    __xdata struct config_t remember;
+    // ^^ external memory space is needed for larger variables
+    // Otherwise, out of memory linker error happens
 
     // Disable watchdog timer
     WDTCN = 0xde;
@@ -41,6 +41,7 @@ void main(void)
     }
     else
     { // For the returning customers, greet them and ask whether desire to change
+        char buffer[10];
         FLASH_get(0, (void*) &remember, sizeof(remember) );
         if (remember.count<0xFFFFFFFF)
             remember.count++;

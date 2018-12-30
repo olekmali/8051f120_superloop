@@ -19,7 +19,7 @@ uint32_t  sampling    = 100000;        // sampling frequency of output in Hz, de
 uint16_t frequency   = 1000;           // frequency of output in Hz, defaults to 1000 Hz
 uint16_t amplitude   = PHASE_PREC;
 uint16_t offset      = PHASE_PREC>>1;
-uint16_t phase_add   = (uint16_t)(628L * 1000L * 65536 / 100000L / 100); // for 1kHz signal and 100kHz sampling rate
+uint16_t phase_add   = (uint16_t)(628LU * 1000LU * 65536LU / 100000LU / 100U); // for 1kHz signal and 100kHz sampling rate
 
 // a full cycle, 16-bit, 2's complement sine wave lookup table
 __code const int16_t SINE_TABLE[128] = { // half - 128, full - 256

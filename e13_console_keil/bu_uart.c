@@ -7,10 +7,10 @@
 //
 // Configure the UART1 using Timer1, for <baudrate> and 8-N-1.
 //
-void UART_Init (uint32_t sysclk, uint32_t baudrate)
+void UART_Init (unsigned long sysclk, unsigned long baudrate)
 {
-    uint8_t SFRPAGE_SAVE = SFRPAGE;    // Save the current SFR page
-    const uint32_t sysclkoverbaud = sysclk/baudrate;
+    unsigned char SFRPAGE_SAVE = SFRPAGE;   // Save the current SFR page
+    const unsigned long sysclkoverbaud = sysclk/baudrate;
 
     SFRPAGE = UART1_PAGE;
     SCON1   = 0x10;                 // SCON1: mode 0, 8-bit UART, enable RX
@@ -60,7 +60,7 @@ void UART_Init (uint32_t sysclk, uint32_t baudrate)
 
 void UART_Quit (void)
 {
-    uint8_t SFRPAGE_SAVE = SFRPAGE;    // Save the current SFR page
+    unsigned char SFRPAGE_SAVE = SFRPAGE;    // Save the current SFR page
     
     // Disable Timer1
     SFRPAGE = TIMER01_PAGE;
@@ -75,18 +75,18 @@ void UART_Quit (void)
     SFRPAGE = SFRPAGE_SAVE;         // Restore the original SFR page
 }
 
-uint8_t ready_getchar (void) {
-    uint8_t SFRPAGE_SAVE = SFRPAGE;    // Save the current SFR page
-    uint8_t c;
+unsigned char ready_getchar (void) {
+    unsigned char SFRPAGE_SAVE = SFRPAGE;    // Save the current SFR page
+    unsigned char c;
     SFRPAGE = UART1_PAGE;
     c = RI1;                        // Read the status if a character is available
     SFRPAGE = SFRPAGE_SAVE;         // Restore the original SFR page
     return (c);
 }
 
-uint8_t ready_putchar (void) {
-    uint8_t SFRPAGE_SAVE = SFRPAGE;    // Save the current SFR page
-    uint8_t c;
+unsigned char ready_putchar (void) {
+    unsigned char SFRPAGE_SAVE = SFRPAGE;    // Save the current SFR page
+    unsigned char c;
     SFRPAGE = UART1_PAGE;
     c = TI1;                        // Read the status if the latest character was sent
     SFRPAGE = SFRPAGE_SAVE;         // Restore the original SFR page
@@ -97,7 +97,7 @@ uint8_t ready_putchar (void) {
 #ifdef SDCC
 
 int getchar ()  {
-    uint8_t SFRPAGE_SAVE = SFRPAGE; // Save the current SFR page
+    unsigned char SFRPAGE_SAVE = SFRPAGE; // Save the current SFR page
     int c;
     SFRPAGE = UART1_PAGE;
     while (!RI1);                   // If needed wait until a character is received, ANSI getchar is always a so-called blocking function
@@ -108,7 +108,7 @@ int getchar ()  {
 }
 
 int putchar (int c)  {
-    uint8_t SFRPAGE_SAVE = SFRPAGE; // Save the current SFR page
+    unsigned char SFRPAGE_SAVE = SFRPAGE; // Save the current SFR page
     SFRPAGE = UART1_PAGE;
     if (c<0) c = 256 - c;           // Per standard putchar behavior a character is converted to unsigned int 0..255
     while (!TI1);                   // If needed wait until char send process is complete

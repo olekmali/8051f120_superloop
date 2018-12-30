@@ -15,10 +15,6 @@
 
 void main(void)
 {
-    uint16_t temperature;               // temperature in hundredths of a degree C
-    uint16_t temp_int, temp_frac;       // integer and fractional portions of temperature
-    __xdata char buffer[80];            // character buffer for outputting temperature
-
     // Disable watchdog timer
     WDTCN = 0xde;
     WDTCN = 0xad;
@@ -32,7 +28,11 @@ void main(void)
 
     while (1)
     {
-        // Take the measurement and read the A/D result
+        uint16_t temperature;               // temperature in hundredths of a degree C
+        uint16_t temp_int, temp_frac;       // integer and fractional portions of temperature
+        __xdata char buffer[80];            // character buffer for outputting temperature
+
+    // Take the measurement and read the A/D result
         setGain(2);
         setChannel(TEMP_CHANNEL);
         temperature = getADC0();

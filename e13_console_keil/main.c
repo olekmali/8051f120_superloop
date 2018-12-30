@@ -52,7 +52,7 @@ void main(void)
 
                 counter++;
                 UART_puts("The switch was pressed ");
-                sprintf(buffer, "%d", counter);
+                sprintf(buffer, "%lu", counter);
                 UART_puts(buffer);
                 UART_puts(" times.\n");
             } else {

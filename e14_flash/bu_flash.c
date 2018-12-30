@@ -16,7 +16,10 @@ void FLASH_Init(void)
     // Do not use read-modify write instruction on this register
     // When read RSTSRC provides the origin of the most recent reset
     // When written RSTSRC configures what could cause a reset
+    uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save the current SFR page
+    SFRPAGE = LEGACY_PAGE;
     RSTSRC |= 0x02;
+    SFRPAGE = SFRPAGE_SAVE;             // Restore the original SFR page
 }
 
 

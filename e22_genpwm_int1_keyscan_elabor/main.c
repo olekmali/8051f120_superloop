@@ -13,7 +13,6 @@
 
 void main(void)
 {
-    uint8_t state;
     uint8_t rate = 10;
     uint16_t duration_ms = 0;
 
@@ -27,7 +26,6 @@ void main(void)
     Timer3_setPWMDuty(rate);
     EA = 1;                             // enable global interrupts
 
-    state = SW2;
     while(1)
     {
         while( ! semaphore_get() )      // waiting for the next 10ms to start

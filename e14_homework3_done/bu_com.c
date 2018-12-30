@@ -105,12 +105,11 @@ void UART_read (char* buffer, uint16_t len)
 
 #ifdef SDCC
 char * gets_safe(char *s, uint16_t n) {
-    char c;
     uint16_t count=0;
     n--;
 
     while (1) {
-        c=getchar();
+        char c=getchar();
         switch(c) {
         case '\b': // backspace
             if (count) {

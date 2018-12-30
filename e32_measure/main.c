@@ -16,10 +16,6 @@
 
 void main(void)
 {
-    uint16_t temperature;               // temperature in hundredths of a degree C
-    uint16_t temp_int, temp_frac;       // integer and fractional portions of temperature
-    __xdata char buffer[80];            // character buffer for outputting temperature
-
     // Disable watchdog timer
     WDTCN = 0xde;
     WDTCN = 0xad;
@@ -35,6 +31,10 @@ void main(void)
 
     while (1)
     {
+        uint16_t temperature;               // temperature in hundredths of a degree C
+        uint16_t temp_int, temp_frac;       // integer and fractional portions of temperature
+        __xdata char buffer[80];            // character buffer for outputting temperature
+
         wait_ms(SYSCLK, 500);           // wait 500 milliseconds
 
         // Read the latest A/D results

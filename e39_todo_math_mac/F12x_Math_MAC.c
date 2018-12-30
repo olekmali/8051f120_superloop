@@ -167,11 +167,11 @@ void main (void)
          case '1':
            {
               printf ("\nEnter Multiplicand:");
-              scanf  ("%u",&u_multiplicand);
+              scanf  ("%hu",&u_multiplicand);
               getchar();
 
               printf ("\nEnter Multiplier:");
-              scanf  ("%u",&u_multiplier);
+              scanf  ("%hu",&u_multiplier);
               getchar();
 
               u_product = u_multiplicand * u_multiplier;
@@ -201,11 +201,11 @@ void main (void)
          case '3':
            {
               printf ("\nEnter Multiplicand:");
-              scanf  ("%u",&multiplicand);
+              scanf  ("%hd",&multiplicand);
               getchar();
 
               printf ("\nEnter Multiplier:");
-              scanf  ("%u",&multiplier);
+              scanf  ("%hd",&multiplier);
               getchar();
 
               product = multiplicand * multiplier;
@@ -257,7 +257,7 @@ void main (void)
                l_product = lrand1 * lrand2;
 
                printf ("\n32-bit Signed Random Number = ");
-               printf ("%l\n\n", ul_product);
+               printf ("%l\n\n", l_product);
             }
             break;
 

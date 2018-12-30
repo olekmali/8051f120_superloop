@@ -1,10 +1,6 @@
 #include "bu_uart.h"
 #include <C8051F120.h>              // Device-specific SFR Definitions
 
-#ifdef SDCC
-char * gets_safe(char *s, uint16_t n);
-#endif
-
 //-----------------------------------------------------------------------------
 // UART_Init
 //-----------------------------------------------------------------------------

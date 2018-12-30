@@ -32,6 +32,9 @@ void main(void)
             putchar(ch);
         for(ch='a'; ch<='z'; ch++)
             putchar(ch);
-
+        /*
+        ch++; if (ch=='\0') ch=' ';
+        putchar(ch);
+        */
     }
 }

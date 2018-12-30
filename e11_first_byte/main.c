@@ -1,7 +1,9 @@
 #include <C8051F120.h>
 
 void main() {
-    __bit state;        // excessive savings? On this processor family we can afford up to some 20 "optimized" bit variables
+    // __bit state;         // excessive savings? On this processor family we can afford up to some 20 "optimized" bit variables
+    unsigned char state;    // if there is no concern for RAM memory and/or there is no underlying support for single bit operations  
+                            // then we could use the usual one byte variable to store just one bit
 
     WDTCN     = 0xDE;   // Watchdog timer must be either disabled or preferably reset 
     WDTCN     = 0xAD;   // every not more than certain number of milliseconds to prevent the board reboot
@@ -15,18 +17,19 @@ void main() {
 
     XBR2      = 0x40;   // 0b01000000 - enable weak pull up resistors on IO so that no input is "floating" open
 
-    state     = P3_7;   // the main development board push button
-    P1_6      = 1;      // the main development board LED
+    state     = P3 & 0x80; // the main development board push button -- need to look only at the one bit that we need
+    P1        = P1 | 0x40; // the main development board LED         -- need to control only the one bit that we need
 
     while(1)
     {
-        if (state!=P3_7)
+        if ( state != (P3 & 0x80) )
         {
-            if (state) 
+            if ( state != 0 ) 
             {
-                P1_6 = ! P1_6;
+                P1 = P1 ^ 0x40; // XOR - toggle a bit, see also P1 ^= 0x40
             }
-            state=P3_7;
+            state = P3 & 0x80;
         }
+        // the button is debounced so there is no need for any delay before it is sampled again
     }
 }

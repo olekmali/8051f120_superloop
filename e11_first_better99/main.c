@@ -3,6 +3,7 @@
 
 
 // *** this below goes to a different library(ies) - .H and .C files ***
+#include <stdint.h>
 #include <C8051F120.h>
 
 inline void DisableWatchdog() 

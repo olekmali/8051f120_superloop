@@ -83,7 +83,7 @@ uint8_t ready_getchar (void) {
     uint8_t SFRPAGE_SAVE = SFRPAGE;    // Save the current SFR page
     uint8_t c;
     SFRPAGE = UART1_PAGE;
-    c = RI1;
+    c = RI1;                        // Read the status if a character is available
     SFRPAGE = SFRPAGE_SAVE;         // Restore the original SFR page
     return (c);
 }
@@ -92,7 +92,7 @@ uint8_t ready_putchar (void) {
     uint8_t SFRPAGE_SAVE = SFRPAGE;    // Save the current SFR page
     uint8_t c;
     SFRPAGE = UART1_PAGE;
-    c = TI1;
+    c = TI1;                        // Read the status if the latest character was sent
     SFRPAGE = SFRPAGE_SAVE;         // Restore the original SFR page
     return (c);
 }
@@ -100,24 +100,26 @@ uint8_t ready_putchar (void) {
 
 #ifdef SDCC
 
-char getchar ()  {
-    uint8_t SFRPAGE_SAVE = SFRPAGE;    // Save the current SFR page
-    char c;
+int getchar ()  {
+    uint8_t SFRPAGE_SAVE = SFRPAGE; // Save the current SFR page
+    int c;
     SFRPAGE = UART1_PAGE;
-    while (!RI1);
-    c = SBUF1;
-    RI1 = 0;
+    while (!RI1);                   // If needed wait until a character is received, ANSI getchar is always a so-called blocking function
+    c = SBUF1;                      // Read from the UART IN buffer the recevied character
+    RI1 = 0;                        // This architecture requires manual clear to restart receiving
     SFRPAGE = SFRPAGE_SAVE;         // Restore the original SFR page
     return (c);
 }
 
-void putchar (char c)  {
-    uint8_t SFRPAGE_SAVE = SFRPAGE;    // Save the current SFR page
+int putchar (int c)  {
+    uint8_t SFRPAGE_SAVE = SFRPAGE; // Save the current SFR page
     SFRPAGE = UART1_PAGE;
-    while (!TI1);
-    TI1 = 0;
-    SBUF1 = c;
+    if (c<0) c = 256 - c;           // Per standard putchar behavior a character is converted to unsigned int 0..255
+    while (!TI1);                   // If needed wait until char send process is complete
+    TI1 = 0;                        // Manually clear the flag so that writing to the UART buffer is noticed
+    SBUF1 = c;                      // Write to the UART OUT buffer the character to be sent next
     SFRPAGE = SFRPAGE_SAVE;         // Restore the original SFR page
+    return(c);                      // We have no means to detect any failures, ANSI putchar is always a so-called blocking function
 }
 
 #endif

@@ -8,8 +8,8 @@ unsigned char ready_getchar (void);
 unsigned char ready_putchar (void);
 
     #ifdef SDCC
-char getchar (void);
-void putchar (char c);
+int getchar (void);
+int putchar (int c);
     #endif
 
 #endif

@@ -42,7 +42,6 @@ void main(void)
     __xdata char buffer[MAX_GPS_LINE_LENGTH];   // char string data received from GPS
     __xdata int32_t numbers[MAX_DATA_COLUMNS];     // extracted columns of data
     __xdata char buf_test[16];                  // variable for test printouts
-    uint8_t received_cnt, i;
 
     // Disable watchdog timer
     WDTCN = 0xde;
@@ -55,6 +54,8 @@ void main(void)
 
     while(1)
     {
+        uint8_t received_cnt, i;
+
         // Enter a test string -- this string would be received by UART connected to a GPS device
         UART_puts("Please enter a line comma-delimited data\n");
         UART_gets(buffer, sizeof(buffer));

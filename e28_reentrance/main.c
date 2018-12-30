@@ -17,7 +17,7 @@
 void main(void)
 {
     uint32_t errors = 0, correct = 0;
-    int32_t a=1, b=1, c, d;
+    int32_t a, b, c, d;
     __xdata static char buffer[64];
 
     // Disable watchdog timer

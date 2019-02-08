@@ -6,14 +6,14 @@
 #define FLASH_Page1 (0x80)
 
 void FLASH_Init(void);
-void FLASH_erase(uint8_t pos);   // 0..127 for page0, or 128 to 255 for page1
+void FLASH_erase(uint8_t pos);      // 0..127 for page0, or 128 to 255 for page1
 void FLASH_put(uint8_t pos, const void * buffer, uint8_t len);
 void FLASH_get(uint8_t pos,       void * buffer, uint8_t len);
 
 uint8_t getTouch(void);
-void          putTouch(uint8_t value);
+void    putTouch(uint8_t value);    // will only set bits to 0 but not back to 1
 
 uint8_t ifFirstTime(void);
-void          setNotFirstTime(void);
+void    setNotFirstTime(void);
 
 #endif

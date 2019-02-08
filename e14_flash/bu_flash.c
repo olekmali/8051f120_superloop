@@ -18,7 +18,7 @@ void FLASH_Init(void)
     // When written RSTSRC configures what could cause a reset
     uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save the current SFR page
     SFRPAGE = LEGACY_PAGE;
-    RSTSRC |= 0x02;
+    // RSTSRC |= 0x02;
     SFRPAGE = SFRPAGE_SAVE;             // Restore the original SFR page
 }
 
@@ -50,8 +50,8 @@ void FLASH_put(uint8_t pos, const void * buffer, uint8_t len)
 {
     __bit EA_SAVE     = EA;             // Preserve the current Interrupt Status
     uint8_t SFRPAGE_SAVE = SFRPAGE;     // Save the current SFR page
-    const uint8_t * source = buffer;
-    uint8_t i;
+    const uint8_t * __data source = buffer;
+    __data uint8_t i;
     SFRPAGE = LEGACY_PAGE;
     EA     = 0;                         // disable interrupts
 

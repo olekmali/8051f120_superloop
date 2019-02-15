@@ -37,6 +37,8 @@ void main(void)
         UART_puts("What is your name, please? ");
         UART_gets(remember.name, 31);
         remember.count=0;
+        FLASH_erase(0);
+        FLASH_put(0, (void*) &remember, sizeof(remember) );
         setNotFirstTime();
     }
     else
@@ -45,7 +47,12 @@ void main(void)
         FLASH_get(0, (void*) &remember, sizeof(remember) );
         if (remember.count<0xFFFFFFFF)
             remember.count++;
+        FLASH_erase(0);
+        // /* ===
+        // optional code starts here
+        FLASH_put(0, (void*) &remember, sizeof(remember) );
         UART_puts("\n\nWelcome for the ");
+        // === end of optional code */
         sprintf(buffer,"%lu", remember.count);
         UART_puts(buffer);
         UART_puts("th time, ");
@@ -58,12 +65,12 @@ void main(void)
             UART_gets(remember.name, 31);
             remember.count=0;
         }
+        FLASH_erase(0);
+        FLASH_put(0, (void*) &remember, sizeof(remember) );
     }
 
-    FLASH_erase(0);
-    FLASH_put(0, (void*) &remember, sizeof(remember) );
-    UART_puts("Press RESET to try again!\n");
 
+    UART_puts("Press RESET to try again!\n");
     while(1)
         ;
 }

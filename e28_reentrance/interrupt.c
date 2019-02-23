@@ -55,6 +55,10 @@ void Timer4_Init (uint32_t sysclock, uint32_t rate)
 void Timer4_ISR (void) __interrupt 16
 {
     static int32_t seed = DEFAULT;
+
+    // A dilemma: use #define or const data type -- minimize use of RAM
+    // A dilemma: use const, or static const, or __code (static) const -- use RAM vs. EPROM
+    // Answer: trust the compiler, if you don't use Q or R as variables they are constant to be optimized
     const int32_t Q = MODULUS / MULTIPLIER;
     const int32_t R = MODULUS % MULTIPLIER;
     
